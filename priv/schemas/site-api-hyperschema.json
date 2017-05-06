@@ -1,0 +1,3227 @@
+{
+  "$schema": "http://interagent.github.io/interagent-hyper-schema",
+  "title": "DatoCMS Site API",
+  "description": "",
+  "type": "object",
+  "links": [
+    {
+      "href": "https://site-api.datocms.com",
+      "rel": "self"
+    }
+  ],
+  "properties": {
+    "session": {
+      "$ref": "#/definitions/session"
+    },
+    "account": {
+      "$ref": "#/definitions/account"
+    },
+    "user": {
+      "$ref": "#/definitions/user"
+    },
+    "site": {
+      "$ref": "#/definitions/site"
+    },
+    "menu_item": {
+      "$ref": "#/definitions/menu_item"
+    },
+    "deploy_event": {
+      "$ref": "#/definitions/deploy_event"
+    },
+    "item_type": {
+      "$ref": "#/definitions/item_type"
+    },
+    "field": {
+      "$ref": "#/definitions/field"
+    },
+    "item": {
+      "$ref": "#/definitions/item"
+    },
+    "upload_request": {
+      "$ref": "#/definitions/upload_request"
+    }
+  },
+  "definitions": {
+    "upload_request": {
+      "position": 8,
+      "links": [
+        {
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "description": "Create a new upload request",
+          "href": "/upload-requests",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/upload_request/properties/type"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "description": "JSON API attributes",
+                    "properties": {
+                      "filename": {
+                        "type": "string",
+                        "description": "The original file name",
+                        "example": "image.png"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/upload_request"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Upload permission",
+      "description": "To upload a file in DatoCMS, first you need to obtain an upload permission through this API endpoint. The response will contain the S3 URL where you will be able to upload the file with a direct PUT request.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "identity": {
+          "$ref": "#/definitions/upload_request/definitions/id"
+        },
+        "type": {
+          "type": [
+            "string"
+          ],
+          "description": "JSON API type field",
+          "pattern": "^upload_request$",
+          "example": "upload_request"
+        },
+        "id": {
+          "type": "string",
+          "description": "The S3 path where the file will be stored",
+          "example": "/7/1455102967-image.png"
+        },
+        "attributes": {
+          "type": "object",
+          "description": "JSON API attributes",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "The URL to use to upload the file with a direct PUT request",
+              "example": "https://dato-images.s3-eu-west-1.amazonaws.com/7/1455102967-image.png?X-Amz-Credential=AKIAJDTXTZHHDUCKAUMA%2F20160210"
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/upload_request/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/upload_request/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/upload_request/definitions/attributes"
+        }
+      }
+    },
+    "item": {
+      "position": 2,
+      "links": [
+        {
+          "method": "POST",
+          "rel": "validate_existing",
+          "private": true,
+          "title": "Validate existing record",
+          "description": "Validates an existing record field",
+          "href": "/items/{(%2Fschemata%2Fitem%23%2Fdefinitions%2Fitem%2Fdefinitions%2Fidentity)}/validate",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "type",
+                  "attributes",
+                  "relationships"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "$ref": "#/definitions/item/properties/id"
+                  },
+                  "type": {
+                    "$ref": "#/definitions/item/definitions/type"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/item/definitions/attributes"
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "required": [
+                      "item_type"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "item_type": {
+                        "type": "object",
+                        "required": [
+                          "data"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "data": {
+                            "$ref": "#/definitions/item_type/definitions/data"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data",
+              "included"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              },
+              "included": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/item_type"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "rel": "validate_new",
+          "private": true,
+          "title": "Validate new record",
+          "description": "Validates a record fields",
+          "href": "/items/validate",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes",
+                  "relationships"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/item/definitions/type"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/item/definitions/attributes"
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "required": [
+                      "item_type"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "item_type": {
+                        "type": "object",
+                        "required": [
+                          "data"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "data": {
+                            "$ref": "#/definitions/item_type/definitions/data"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data",
+              "included"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              },
+              "included": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/item_type"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "description": "Create a new record",
+          "href": "/items",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes",
+                  "relationships"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/item/definitions/type"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/item/definitions/attributes"
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "required": [
+                      "item_type"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "item_type": {
+                        "type": "object",
+                        "description": "The record model",
+                        "required": [
+                          "data"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "data": {
+                            "$ref": "#/definitions/item_type/definitions/data"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data",
+              "included"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              },
+              "included": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/item_type"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "PUT",
+          "rel": "update",
+          "title": "Update",
+          "description": "Updates a record",
+          "href": "/items/{(%2Fschemata%2Fitem%23%2Fdefinitions%2Fitem%2Fdefinitions%2Fidentity)}",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "id",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/item/properties/type"
+                  },
+                  "id": {
+                    "$ref": "#/definitions/item/properties/id"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/item/properties/attributes"
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "instances",
+          "title": "Index",
+          "description": "Lists records",
+          "href": "/items",
+          "schema": {
+            "type": [
+              "object"
+            ],
+            "properties": {
+              "filter[ids]": {
+                "description": "IDs to fetch, comma separated",
+                "example": "12,31",
+                "type": [
+                  "string"
+                ]
+              },
+              "filter[type]": {
+                "description": "model ID to filter",
+                "example": "44",
+                "type": [
+                  "string"
+                ]
+              },
+              "filter[query]": {
+                "description": "textual query to match",
+                "example": "foo",
+                "type": [
+                  "string"
+                ]
+              },
+              "page[offset]": {
+                "description": "index of first record to fetch",
+                "example": 2,
+                "default": 1,
+                "type": [
+                  "integer"
+                ]
+              },
+              "page[limit]": {
+                "description": "number of records to fetch",
+                "example": 15,
+                "default": 30,
+                "type": [
+                  "integer"
+                ]
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/item"
+                }
+              },
+              "meta": {
+                "type": "object",
+                "required": [
+                  "total_count"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "total_count": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "self",
+          "title": "Show",
+          "description": "Show record",
+          "href": "/items/{(%2Fschemata%2Fitem%23%2Fdefinitions%2Fitem%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              }
+            }
+          }
+        },
+        {
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete",
+          "description": "Deletes a record",
+          "href": "/items/{(%2Fschemata%2Fitem%23%2Fdefinitions%2Fitem%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Record",
+      "description": "A item is a single instance of a item type",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "relationships"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "type": "object",
+          "description": "JSON API data",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/item/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/item/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/item/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^item$",
+          "example": "item"
+        },
+        "id": {
+          "description": "ID of item",
+          "type": "string",
+          "example": "4235"
+        },
+        "attributes": {
+          "description": "The JSON data associated to the item",
+          "type": "object",
+          "example": {
+            "title": "This is a item!"
+          }
+        },
+        "relationships": {
+          "description": "JSON API links",
+          "type": "object",
+          "required": [
+            "item_type",
+            "last_editor"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "item_type": {
+              "description": "The item item type",
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/item_type/definitions/data"
+                }
+              }
+            },
+            "last_editor": {
+              "description": "The last user (account administrator/editor) that edited the item",
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/user/definitions/data"
+                    },
+                    {
+                      "$ref": "#/definitions/account/definitions/data"
+                    },
+                    {
+                      "type": [
+                        "null"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/item/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/item/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/item/definitions/attributes"
+        },
+        "relationships": {
+          "$ref": "#/definitions/item/definitions/relationships"
+        }
+      }
+    },
+    "site": {
+      "position": 1,
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET",
+          "title": "Show",
+          "description": "Retrieve a site",
+          "href": "/site",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/site"
+              },
+              "included": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "$ref": "#/definitions/menu_item"
+                    },
+                    {
+                      "$ref": "#/definitions/user"
+                    },
+                    {
+                      "$ref": "#/definitions/item_type"
+                    },
+                    {
+                      "$ref": "#/definitions/field"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "PUT",
+          "rel": "update",
+          "title": "Update",
+          "description": "Updates a site settings",
+          "href": "/site",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "id",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/site/properties/type"
+                  },
+                  "id": {
+                    "$ref": "#/definitions/site/properties/id"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "no_index": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/no_index"
+                      },
+                      "favicon": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/favicon"
+                      },
+                      "global_seo": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/global_seo"
+                      },
+                      "name": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/name"
+                      },
+                      "theme_hue": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/theme_hue"
+                      },
+                      "production_deploy_adapter": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/production_deploy_adapter"
+                      },
+                      "production_deploy_settings": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/production_deploy_settings"
+                      },
+                      "staging_deploy_adapter": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/staging_deploy_adapter"
+                      },
+                      "staging_deploy_settings": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/staging_deploy_settings"
+                      },
+                      "locales": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/locales"
+                      },
+                      "timezone": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/timezone"
+                      },
+                      "ssg": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/ssg"
+                      },
+                      "frontend_url": {
+                        "$ref": "#/definitions/site/definitions/attributes/properties/frontend_url"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/site"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Site",
+      "description": "A site represents a specific DatoCMS administrative area",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "relationships",
+        "attributes"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "type": "object",
+          "description": "JSON API data",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/site/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/site/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/site/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^site$",
+          "example": "site"
+        },
+        "id": {
+          "description": "ID of site",
+          "type": "string",
+          "example": "155"
+        },
+        "attributes": {
+          "description": "JSON API attributes",
+          "type": "object",
+          "required": [
+            "name",
+            "locales",
+            "domain",
+            "theme_hue"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Site name",
+              "example": "My Awesome Website"
+            },
+            "domain": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Administrative area custom domain",
+              "example": "admin.my-awesome-website.com"
+            },
+            "production_webhook_url": {
+              "type": "string",
+              "description": "Webhook URL",
+              "example": "https://webhooks.datocms.com/fc91489bdf5e37193e0/deploy-results"
+            },
+            "staging_webhook_url": {
+              "type": "string",
+              "description": "Webhook URL",
+              "example": "https://webhooks.datocms.com/fc91489bdf5e37193e0/deploy-results"
+            },
+            "internal_domain": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "DatoCMS internal domain for the administrative area",
+              "example": "my-website.admin.datocms.com"
+            },
+            "locales": {
+              "type": "array",
+              "description": "Available locales",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "example": [
+                "en"
+              ]
+            },
+            "timezone": {
+              "type": "string",
+              "description": "Site default timezone",
+              "example": "Europe/London"
+            },
+            "items_count": {
+              "type": "integer",
+              "description": "Number of items present in the site",
+              "example": 812
+            },
+            "no_index": {
+              "type": "boolean",
+              "description": "Whether the website needs to be indexed by search engines or not",
+              "example": true
+            },
+            "favicon": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "required": [
+                "path",
+                "width",
+                "height",
+                "format",
+                "size"
+              ],
+              "properties": {
+                "path": {
+                  "type": [
+                    "string"
+                  ],
+                  "description": "The S3 path where the file is stored",
+                  "example": "/7/1455102967-image.png"
+                },
+                "width": {
+                  "type": [
+                    "integer"
+                  ],
+                  "description": "Image width",
+                  "example": 400
+                },
+                "height": {
+                  "type": [
+                    "integer"
+                  ],
+                  "description": "Image height",
+                  "example": 500
+                },
+                "format": {
+                  "type": [
+                    "string"
+                  ],
+                  "enum": [
+                    "png",
+                    "jpg",
+                    "gif"
+                  ],
+                  "description": "Image format",
+                  "example": "png"
+                },
+                "size": {
+                  "type": [
+                    "integer"
+                  ],
+                  "description": "The size of the image in bytes",
+                  "example": 424112
+                }
+              }
+            },
+            "theme_hue": {
+              "description": "Specifies the hue to use primary color in Site backend",
+              "type": "integer",
+              "example": 167
+            },
+            "production_deploy_adapter": {
+              "description": "Specify the deploy adapter to use",
+              "type": [
+                "string",
+                "null"
+              ],
+              "example": "travis"
+            },
+            "production_deploy_settings": {
+              "description": "Specify the deploy adapter options",
+              "type": [
+                "object",
+                "null"
+              ],
+              "example": {
+                "api_token": "XXXYYY",
+                "repo": "stefanoverna/sample-datocms-hugo-portfolio",
+                "branch": "master",
+                "config": null
+              }
+            },
+            "staging_deploy_adapter": {
+              "description": "Specify the deploy adapter to use",
+              "type": [
+                "string",
+                "null"
+              ],
+              "example": "travis"
+            },
+            "staging_deploy_settings": {
+              "description": "Specify the deploy adapter options",
+              "type": [
+                "object",
+                "null"
+              ],
+              "example": {
+                "api_token": "XXXYYY",
+                "repo": "stefanoverna/sample-datocms-hugo-portfolio",
+                "branch": "master",
+                "config": null
+              }
+            },
+            "readonly_token": {
+              "description": "The read-only API token for this Site",
+              "type": [
+                "string"
+              ],
+              "example": "2808246340fce4da464"
+            },
+            "readwrite_token": {
+              "description": "Specify the read-write API token for this Site",
+              "type": [
+                "string"
+              ],
+              "example": "ba3e0791d160e5f2a70"
+            },
+            "last_data_change_at": {
+              "description": "Specifies the last time when a change of data occurred",
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time",
+              "example": "2017-03-30T09:29:14.872Z"
+            },
+            "production_last_deploy_at": {
+              "description": "Specifies the last time when a deploy occurred",
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time",
+              "example": "2017-02-10T11:03:42.208Z"
+            },
+            "staging_last_deploy_at": {
+              "description": "Specifies the last time when a deploy occurred",
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time",
+              "example": "2017-02-10T11:03:42.208Z"
+            },
+            "last_dump_at": {
+              "description": "Specifies the last time an integration plugin called the API",
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time",
+              "example": "2017-02-10T11:03:42.208Z"
+            },
+            "deployable": {
+              "description": "Specifies whether all the deploy informations are correctly setup or not",
+              "type": "boolean",
+              "example": true
+            },
+            "production_deploy_status": {
+              "description": "Specifies deploy status",
+              "type": [
+                "string"
+              ],
+              "enum": [
+                "unstarted",
+                "pending",
+                "success",
+                "fail"
+              ],
+              "example": "success"
+            },
+            "staging_deploy_status": {
+              "description": "Specifies deploy status",
+              "type": [
+                "string"
+              ],
+              "enum": [
+                "unstarted",
+                "pending",
+                "success",
+                "fail"
+              ],
+              "example": "success"
+            },
+            "ssg": {
+              "description": "Specifies static site generator used",
+              "type": [
+                "null",
+                "string"
+              ],
+              "example": "hugo"
+            },
+            "frontend_url": {
+              "description": "Specifies the URL of the generated static website",
+              "type": [
+                "string",
+                "null"
+              ],
+              "example": "https://www.my-awesome-website.com"
+            },
+            "global_seo": {
+              "description": "Specifies default global settings",
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "site_name": {
+                  "type": [
+                    "string"
+                  ],
+                  "description": "Site name, used in social sharing",
+                  "example": "My Awesome Website"
+                },
+                "fallback_seo": {
+                  "type": [
+                    "object"
+                  ],
+                  "required": [
+                    "title",
+                    "description",
+                    "image"
+                  ],
+                  "properties": {
+                    "title": {
+                      "type": [
+                        "string"
+                      ],
+                      "example": "Default meta title"
+                    },
+                    "description": {
+                      "type": [
+                        "string"
+                      ],
+                      "example": "Default meta description"
+                    },
+                    "image": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "required": [
+                        "path",
+                        "width",
+                        "height",
+                        "format",
+                        "size"
+                      ],
+                      "properties": {
+                        "path": {
+                          "type": [
+                            "string"
+                          ],
+                          "description": "The S3 path where the file is stored",
+                          "example": "/7/1455102967-image.png"
+                        },
+                        "width": {
+                          "type": [
+                            "integer"
+                          ],
+                          "description": "Image width",
+                          "example": 400
+                        },
+                        "height": {
+                          "type": [
+                            "integer"
+                          ],
+                          "description": "Image height",
+                          "example": 500
+                        },
+                        "format": {
+                          "type": [
+                            "string"
+                          ],
+                          "enum": [
+                            "png",
+                            "jpg",
+                            "gif"
+                          ],
+                          "description": "Image format",
+                          "example": "png"
+                        },
+                        "size": {
+                          "type": [
+                            "integer"
+                          ],
+                          "description": "The size of the image in bytes",
+                          "example": 424112
+                        }
+                      }
+                    }
+                  }
+                },
+                "title_suffix": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "example": " - My Awesome Website",
+                  "description": "Title meta tag suffix"
+                },
+                "facebook_page_url": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "URL of facebook page",
+                  "example": "http://facebook.com/awesomewebsite"
+                },
+                "twitter_account": {
+                  "type": [
+                    "null",
+                    "string"
+                  ],
+                  "description": "Twitter account associated to website",
+                  "example": "@awesomewebsite"
+                }
+              }
+            }
+          }
+        },
+        "relationships": {
+          "description": "JSON API links",
+          "type": "object",
+          "required": [
+            "menu_items",
+            "item_types",
+            "account",
+            "users"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "account": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/account/definitions/data"
+                }
+              }
+            },
+            "menu_items": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "description": "The list of site menu items",
+                  "items": {
+                    "$ref": "#/definitions/menu_item/definitions/data"
+                  }
+                }
+              }
+            },
+            "users": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "description": "The list of site users",
+                  "items": {
+                    "$ref": "#/definitions/user/definitions/data"
+                  }
+                }
+              }
+            },
+            "item_types": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "description": "The list of site item types",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/item_type/definitions/data"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/site/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/site/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/site/definitions/attributes"
+        },
+        "relationships": {
+          "$ref": "#/definitions/site/definitions/relationships"
+        }
+      }
+    },
+    "menu_item": {
+      "position": 6,
+      "links": [
+        {
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "description": "Create a new menu item",
+          "href": "/menu-items",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes",
+                  "relationships"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/menu_item/definitions/type"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/menu_item/definitions/attributes"
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "item_type": {
+                        "$ref": "#/definitions/menu_item/definitions/relationships/properties/item_type"
+                      },
+                      "parent": {
+                        "$ref": "#/definitions/menu_item/definitions/relationships/properties/parent"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/menu_item"
+              }
+            }
+          }
+        },
+        {
+          "method": "PUT",
+          "rel": "update",
+          "title": "Update",
+          "description": "Updates a menu item",
+          "href": "/menu-items/{(%2Fschemata%2Fmenu_item%23%2Fdefinitions%2Fmenu_item%2Fdefinitions%2Fidentity)}",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "id",
+                  "attributes",
+                  "relationships"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/menu_item/properties/type"
+                  },
+                  "id": {
+                    "$ref": "#/definitions/menu_item/properties/id"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/menu_item/properties/attributes"
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "item_type": {
+                        "$ref": "#/definitions/menu_item/definitions/relationships/properties/item_type"
+                      },
+                      "parent": {
+                        "$ref": "#/definitions/menu_item/definitions/relationships/properties/parent"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/menu_item"
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "instances",
+          "title": "Index",
+          "description": "Lists menu items",
+          "href": "/menu-items",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/menu_item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "self",
+          "title": "Show",
+          "description": "Show menu item",
+          "href": "/menu-items/{(%2Fschemata%2Fmenu_item%23%2Fdefinitions%2Fmenu_item%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/menu_item"
+              }
+            }
+          }
+        },
+        {
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete",
+          "description": "Deletes menu item",
+          "href": "/menu-items/{(%2Fschemata%2Fmenu_item%23%2Fdefinitions%2Fmenu_item%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/menu_item"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Menu Item",
+      "description": "A menu item helps organize item types within the backend interface",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "relationships",
+        "attributes"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "type": "object",
+          "description": "JSON API data",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/menu_item/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/menu_item/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/menu_item/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^menu_item$",
+          "example": "menu_item"
+        },
+        "id": {
+          "description": "ID of menu item",
+          "type": "string",
+          "example": "34"
+        },
+        "attributes": {
+          "description": "JSON API attributes",
+          "type": "object",
+          "required": [
+            "label",
+            "position"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "The label of the menu item",
+              "example": "Posts"
+            },
+            "position": {
+              "type": "integer",
+              "description": "Ordering index",
+              "example": 1
+            }
+          }
+        },
+        "relationships": {
+          "description": "JSON API links",
+          "type": "object",
+          "required": [
+            "item_type",
+            "parent",
+            "children"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "item_type": {
+              "type": "object",
+              "description": "item type associated with the menu item",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/item_type/definitions/data"
+                    },
+                    {
+                      "type": [
+                        "null"
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "parent": {
+              "type": "object",
+              "description": "Parent menu item",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "anyOf": [
+                    {
+                      "type": [
+                        "null"
+                      ]
+                    },
+                    {
+                      "$ref": "#/definitions/menu_item/definitions/data"
+                    }
+                  ],
+                  "example": null
+                }
+              }
+            },
+            "children": {
+              "type": "object",
+              "description": "Underlying menu items",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/menu_item/definitions/data"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/menu_item/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/menu_item/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/menu_item/definitions/attributes"
+        },
+        "relationships": {
+          "$ref": "#/definitions/menu_item/definitions/relationships"
+        }
+      }
+    },
+    "deploy_event": {
+      "position": 7,
+      "links": [
+        {
+          "method": "GET",
+          "rel": "instances",
+          "title": "Index",
+          "description": "Lists deploy events",
+          "href": "/deploy-events",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/deploy_event"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "self",
+          "title": "Show",
+          "description": "Show deploy event",
+          "href": "/deploy-events/{(%2Fschemata%2Fdeploy_event%23%2Fdefinitions%2Fdeploy_event%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/deploy_event"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Deploy activity",
+      "description": "Represents an event occurred during the deploy process",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "relationships"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "type": "object",
+          "description": "JSON API data",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/deploy_event/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/deploy_event/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/deploy_event/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^deploy_event$",
+          "example": "deploy_event"
+        },
+        "id": {
+          "description": "ID of menu item",
+          "type": "string",
+          "example": "34"
+        },
+        "attributes": {
+          "description": "JSON API attributes",
+          "type": "object",
+          "required": [
+            "event_type",
+            "data",
+            "created_at",
+            "environment"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "event_type": {
+              "type": "string",
+              "enum": [
+                "request",
+                "request_failed",
+                "response_success",
+                "response_failure",
+                "response_timeout"
+              ],
+              "description": "The type of activity",
+              "example": "response_success"
+            },
+            "environment": {
+              "description": "Environment",
+              "type": [
+                "string"
+              ],
+              "example": "production",
+              "enum": [
+                "production",
+                "staging"
+              ]
+            },
+            "created_at": {
+              "description": "The moment the activity occurred",
+              "type": [
+                "string"
+              ],
+              "format": "date-time",
+              "example": "2016-09-20T18:50:24.914Z"
+            },
+            "data": {
+              "description": "Any details regarding the event",
+              "type": [
+                "object"
+              ],
+              "example": {
+                "request_body": "{\"object_kind\":\"build\",\"ref\":\"master\",\"tag\":false,\"before_sha\":\"0000000000000000000000000000000000000000\",\"sha\":\"ecfccf5ea28af900c14b499a2b762e029c7492\",\"build_id\":10495,\"build_name\":\"build\",\"build_stage\":\"test\",\"build_status\":\"success\",\"build_started_at\":\"2016-09-20 18:49:22 UTC\",\"build_finished_at\":\"2016-09-20 18:50:24 UTC\",\"build_duration\":62.279854524,\"build_allow_failure\":false,\"project_id\":195,\"project_name\":\"Stefano Verna / awesome-website\",\"user\":{\"id\":null,\"name\":null,\"email\":null},\"commit\":{\"id\":6754,\"sha\":\"ecfccf5ea28af900c6614b499a2b762e029c7492\",\"message\":\"Update gems\\n\",\"author_name\":\"Stefano Verna\",\"author_email\":\"s.verna@datocms.com\",\"status\":\"success\",\"duration\":62,\"started_at\":\"2016-09-20 18:49:22 UTC\",\"finished_at\":\"2016-09-20 18:50:24 UTC\"},\"repository\":{\"name\":\"awesome-website\",\"url\":\"git@gitlab.com:stefanoverna/awesome-website.git\",\"description\":\"\",\"visibility_level\":0}}",
+                "request_headers": {
+                  "Via": "1.1 vegur",
+                  "Host": "webhooks.datocms.com",
+                  "Origin": null,
+                  "Version": "HTTP/1.1",
+                  "Connection": "close",
+                  "Connect-Time": "0",
+                  "X-Request-Id": "5c1beced-0fe3-4c5b-b45d-68ba4a15b5f3",
+                  "X-Gitlab-Event": "Build Hook",
+                  "X-Forwarded-For": "46.101.135.219",
+                  "X-Request-Start": "1474397424903",
+                  "Total-Route-Time": "0",
+                  "X-Forwarded-Port": "443",
+                  "X-Forwarded-Proto": "https"
+                }
+              }
+            }
+          }
+        },
+        "relationships": {
+          "description": "JSON API links",
+          "type": "object",
+          "required": [
+            "site"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "site": {
+              "type": "object",
+              "description": "Source site",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/site/definitions/data"
+                }
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/deploy_event/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/deploy_event/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/deploy_event/definitions/attributes"
+        },
+        "relationships": {
+          "$ref": "#/definitions/deploy_event/definitions/relationships"
+        }
+      }
+    },
+    "account": {
+      "links": [
+
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "type": "object",
+      "title": "Account",
+      "description": "DatoCMS account",
+      "required": [
+        "type",
+        "id",
+        "attributes"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "description": "JSON API data",
+          "type": "object",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/account/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/account/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/account/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^account$",
+          "example": "account"
+        },
+        "id": {
+          "description": "ID of account",
+          "type": "string",
+          "example": "312"
+        },
+        "attributes": {
+          "description": "JSON API attributes",
+          "type": "object",
+          "required": [
+            "email"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Email",
+              "example": "foo@bar.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "Password"
+            },
+            "api_token": {
+              "type": "string",
+              "description": "API token"
+            },
+            "valid_card": {
+              "type": "boolean",
+              "description": "Whether the account has a valid credit card"
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/account/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/account/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/account/definitions/attributes"
+        }
+      }
+    },
+    "item_type": {
+      "position": 3,
+      "links": [
+        {
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "description": "Create a new model",
+          "href": "/item-types",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes",
+                  "relationships"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/item_type/definitions/type"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/item_type/definitions/attributes"
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "required": [
+                      "ordering_field"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "ordering_field": {
+                        "$ref": "#/definitions/item_type/definitions/relationships/properties/ordering_field"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item_type"
+              },
+              "included": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "$ref": "#/definitions/menu_item"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "PUT",
+          "rel": "update",
+          "title": "Update",
+          "description": "Updates a model",
+          "href": "/item-types/{(%2Fschemata%2Fitem_type%23%2Fdefinitions%2Fitem_type%2Fdefinitions%2Fidentity)}",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "id",
+                  "attributes",
+                  "relationships"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/item_type/properties/type"
+                  },
+                  "id": {
+                    "$ref": "#/definitions/item_type/properties/id"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/item_type/properties/attributes"
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "required": [
+                      "ordering_field"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "ordering_field": {
+                        "$ref": "#/definitions/item_type/definitions/relationships/properties/ordering_field"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item_type"
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "instances",
+          "title": "Index",
+          "description": "Lists models",
+          "href": "/item-types",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/item_type"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "self",
+          "title": "Show",
+          "description": "Show model",
+          "href": "/item-types/{(%2Fschemata%2Fitem_type%23%2Fdefinitions%2Fitem_type%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item_type"
+              }
+            }
+          }
+        },
+        {
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete",
+          "description": "Deletes model",
+          "href": "/item-types/{(%2Fschemata%2Fitem_type%23%2Fdefinitions%2Fitem_type%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/item_type"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Model",
+      "description": "A model is a specific kind of editable content",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "relationships",
+        "attributes"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "description": "JSON API data",
+          "type": "object",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/item_type/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/item_type/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/item_type/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^item_type$",
+          "example": "item_type"
+        },
+        "id": {
+          "description": "ID of item type",
+          "type": "string",
+          "example": "44"
+        },
+        "attributes": {
+          "description": "JSON API attributes",
+          "type": "object",
+          "required": [
+            "name",
+            "api_key",
+            "singleton",
+            "sortable",
+            "ordering_direction"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "Blog post"
+            },
+            "api_key": {
+              "type": "string",
+              "example": "post"
+            },
+            "singleton": {
+              "type": "boolean"
+            },
+            "sortable": {
+              "type": "boolean"
+            },
+            "ordering_direction": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "example": "desc",
+              "enum": [
+                null,
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        },
+        "relationships": {
+          "description": "JSON API links",
+          "type": "object",
+          "required": [
+            "fields"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "menu_item": {
+              "type": "object",
+              "description": "The menu item instance related to this item type",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/menu_item/definitions/data"
+                    },
+                    {
+                      "type": [
+                        "null"
+                      ]
+                    }
+                  ],
+                  "example": null
+                }
+              }
+            },
+            "singleton_item": {
+              "type": "object",
+              "description": "The item instance related to this item type",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/item/definitions/data"
+                    },
+                    {
+                      "type": [
+                        "null"
+                      ]
+                    }
+                  ],
+                  "example": null
+                }
+              }
+            },
+            "fields": {
+              "type": "object",
+              "description": "The list of item type fields",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/field/definitions/data"
+                  }
+                }
+              }
+            },
+            "ordering_field": {
+              "type": "object",
+              "description": "The field upon which the collection is sorted",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/field/definitions/data"
+                    },
+                    {
+                      "type": [
+                        "null"
+                      ]
+                    }
+                  ],
+                  "example": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/item_type/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/item_type/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/item_type/definitions/attributes"
+        },
+        "relationships": {
+          "$ref": "#/definitions/item_type/definitions/relationships"
+        }
+      }
+    },
+    "field": {
+      "position": 4,
+      "links": [
+        {
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "description": "Create a new field",
+          "href": "/item-types/{(%2Fschemata%2Fitem_type%23%2Fdefinitions%2Fitem_type%2Fdefinitions%2Fidentity)}/fields",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/field/definitions/type"
+                  },
+                  "attributes": {
+                    "$ref": "#/definitions/field/definitions/attributes"
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/field"
+              }
+            }
+          }
+        },
+        {
+          "method": "PUT",
+          "rel": "update",
+          "title": "Update",
+          "description": "Updates a field",
+          "href": "/fields/{(%2Fschemata%2Ffield%23%2Fdefinitions%2Ffield%2Fdefinitions%2Fidentity)}",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "id",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/field/properties/type"
+                  },
+                  "id": {
+                    "$ref": "#/definitions/field/properties/id"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "$ref": "#/definitions/field/definitions/attributes/properties/label"
+                      },
+                      "api_key": {
+                        "$ref": "#/definitions/field/definitions/attributes/properties/api_key"
+                      },
+                      "localized": {
+                        "$ref": "#/definitions/field/definitions/attributes/properties/localized"
+                      },
+                      "validators": {
+                        "$ref": "#/definitions/field/definitions/attributes/properties/validators"
+                      },
+                      "appeareance": {
+                        "$ref": "#/definitions/field/definitions/attributes/properties/appeareance"
+                      },
+                      "position": {
+                        "$ref": "#/definitions/field/definitions/attributes/properties/position"
+                      },
+                      "hint": {
+                        "$ref": "#/definitions/field/definitions/attributes/properties/hint"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/field"
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "instances",
+          "title": "Index",
+          "description": "Lists fields",
+          "href": "/item-types/{(%2Fschemata%2Fitem_type%23%2Fdefinitions%2Fitem_type%2Fdefinitions%2Fidentity)}/fields",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/field"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "self",
+          "title": "Show",
+          "description": "Show field",
+          "href": "/fields/{(%2Fschemata%2Ffield%23%2Fdefinitions%2Ffield%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/field"
+              }
+            }
+          }
+        },
+        {
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete",
+          "description": "Deletes field",
+          "href": "/fields/{(%2Fschemata%2Ffield%23%2Fdefinitions%2Ffield%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/field"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Field",
+      "description": "A field represents a single chunk of data associated to a item type",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "relationships"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "description": "JSON API data",
+          "type": "object",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/field/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/field/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/field/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^field$",
+          "example": "field"
+        },
+        "id": {
+          "description": "ID of field",
+          "type": "string",
+          "example": "124"
+        },
+        "attributes": {
+          "description": "JSON API attributes",
+          "type": "object",
+          "required": [
+            "label",
+            "field_type",
+            "api_key",
+            "localized",
+            "validators",
+            "appeareance",
+            "position",
+            "hint"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "The label of the field",
+              "example": "Title"
+            },
+            "field_type": {
+              "type": "string",
+              "description": "Type of input",
+              "example": "string"
+            },
+            "localized": {
+              "type": "boolean",
+              "description": "Whether the field needs to be multilanguage or not"
+            },
+            "api_key": {
+              "type": "string",
+              "description": "Field API key",
+              "example": "title"
+            },
+            "hint": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Field hint",
+              "example": "This field will be used as post title"
+            },
+            "validators": {
+              "type": "object",
+              "description": "Optional field validations",
+              "example": {
+                "required": {
+                }
+              }
+            },
+            "appeareance": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "description": "Field appeareance",
+              "example": {
+                "type": "plain"
+              }
+            },
+            "position": {
+              "type": "integer",
+              "description": "Ordering index",
+              "example": 1
+            }
+          }
+        },
+        "relationships": {
+          "description": "JSON API links",
+          "type": "object",
+          "required": [
+            "item_type"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "item_type": {
+              "type": "object",
+              "description": "Field item type",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/item_type/definitions/data"
+                }
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/field/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/field/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/field/definitions/attributes"
+        },
+        "relationships": {
+          "$ref": "#/definitions/field/definitions/relationships"
+        }
+      }
+    },
+    "user": {
+      "position": 5,
+      "links": [
+        {
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "description": "Invite a new editor",
+          "href": "/users",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/user/definitions/type"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "required": [
+                      "email",
+                      "first_name",
+                      "last_name"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "email": {
+                        "$ref": "#/definitions/user/definitions/attributes/properties/email"
+                      },
+                      "first_name": {
+                        "$ref": "#/definitions/user/definitions/attributes/properties/first_name"
+                      },
+                      "last_name": {
+                        "$ref": "#/definitions/user/definitions/attributes/properties/last_name"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/user"
+              }
+            }
+          }
+        },
+        {
+          "method": "PUT",
+          "rel": "update",
+          "title": "Update",
+          "description": "Updates a editor",
+          "href": "/users/{(%2Fschemata%2Fuser%23%2Fdefinitions%2Fuser%2Fdefinitions%2Fidentity)}",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "id",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/user/properties/type"
+                  },
+                  "id": {
+                    "$ref": "#/definitions/user/properties/id"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "email": {
+                        "$ref": "#/definitions/user/definitions/attributes/properties/email"
+                      },
+                      "first_name": {
+                        "$ref": "#/definitions/user/definitions/attributes/properties/first_name"
+                      },
+                      "last_name": {
+                        "$ref": "#/definitions/user/definitions/attributes/properties/last_name"
+                      },
+                      "password": {
+                        "type": "string",
+                        "description": "Password",
+                        "example": "supersecret"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/user"
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "instances",
+          "title": "Index",
+          "description": "Lists editors",
+          "href": "/users",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/user"
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "rel": "self",
+          "title": "Show",
+          "description": "Show editor",
+          "href": "/users/{(%2Fschemata%2Fuser%23%2Fdefinitions%2Fuser%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/user"
+              }
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "rel": "reset_password",
+          "title": "Reset password",
+          "description": "Request a password reset",
+          "private": true,
+          "href": "/users/reset_password",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "attributes"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/user/definitions/type"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "required": [
+                      "email"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "email": {
+                        "$ref": "#/definitions/user/definitions/attributes/properties/email"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete",
+          "description": "Deletes a editor",
+          "href": "/users/{(%2Fschemata%2Fuser%23%2Fdefinitions%2Fuser%2Fdefinitions%2Fidentity)}",
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/user"
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "type": "object",
+      "title": "Editor",
+      "description": "DatoCMS editor",
+      "required": [
+        "type",
+        "id",
+        "attributes"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "description": "JSON API data",
+          "type": "object",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/user/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/user/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/user/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^user$",
+          "example": "user"
+        },
+        "id": {
+          "description": "ID of editor",
+          "type": "string",
+          "example": "312"
+        },
+        "attributes": {
+          "description": "JSON API attributes",
+          "type": "object",
+          "required": [
+            "email",
+            "first_name",
+            "last_name",
+            "state"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Email",
+              "example": "mark.smith@example.com"
+            },
+            "first_name": {
+              "type": "string",
+              "description": "First name",
+              "example": "Mark"
+            },
+            "last_name": {
+              "type": "string",
+              "description": "Last name",
+              "example": "Smith"
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "REGISTERED",
+                "INVITATION_PENDING"
+              ],
+              "description": "Status of user registration",
+              "example": "REGISTERED"
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/user/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/user/definitions/id"
+        },
+        "attributes": {
+          "$ref": "#/definitions/user/definitions/attributes"
+        }
+      }
+    },
+    "session": {
+      "links": [
+        {
+          "method": "POST",
+          "rel": "create",
+          "title": "Create",
+          "description": "Create a new session",
+          "private": true,
+          "href": "/sessions",
+          "schema": {
+            "type": "object",
+            "required": [
+              "data"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "attributes"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "type": {
+                        "type": [
+                          "string"
+                        ],
+                        "description": "JSON API type field",
+                        "pattern": "^email_credentials$",
+                        "example": "email_credentials"
+                      },
+                      "attributes": {
+                        "description": "JSON API attributes",
+                        "type": "object",
+                        "required": [
+                          "email",
+                          "password"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "description": "Email",
+                            "example": "foo@bar.com"
+                          },
+                          "password": {
+                            "type": "string",
+                            "description": "Password",
+                            "example": "changeme"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "attributes"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "type": {
+                        "type": [
+                          "string"
+                        ],
+                        "description": "JSON API type field",
+                        "pattern": "^password_reset$",
+                        "example": "password_reset"
+                      },
+                      "attributes": {
+                        "description": "JSON API attributes",
+                        "type": "object",
+                        "required": [
+                          "token",
+                          "password"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "token": {
+                            "type": "string",
+                            "description": "Invitation token",
+                            "example": "XXXYYYZZZ"
+                          },
+                          "password": {
+                            "type": "string",
+                            "description": "Password",
+                            "example": "changeme"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "type",
+                      "attributes"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "type": {
+                        "type": [
+                          "string"
+                        ],
+                        "description": "JSON API type field",
+                        "pattern": "^invitation$",
+                        "example": "invitation"
+                      },
+                      "attributes": {
+                        "description": "JSON API attributes",
+                        "type": "object",
+                        "required": [
+                          "token",
+                          "password"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "token": {
+                            "type": "string",
+                            "description": "Invitation token",
+                            "example": "XXXYYYZZZ"
+                          },
+                          "password": {
+                            "type": "string",
+                            "description": "Password",
+                            "example": "changeme"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "targetSchema": {
+            "type": "object",
+            "required": [
+              "data",
+              "included"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "$ref": "#/definitions/session"
+              },
+              "included": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/user"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Session",
+      "description": "A session is required to access to read-and-write API endpoints",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "relationships"
+      ],
+      "additionalProperties": false,
+      "definitions": {
+        "data": {
+          "description": "JSON API data",
+          "type": "object",
+          "required": [
+            "type",
+            "id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/session/properties/type"
+            },
+            "id": {
+              "$ref": "#/definitions/session/properties/id"
+            }
+          }
+        },
+        "identity": {
+          "$ref": "#/definitions/session/properties/id"
+        },
+        "type": {
+          "description": "JSON API type field",
+          "type": [
+            "string"
+          ],
+          "pattern": "^session$",
+          "example": "session"
+        },
+        "id": {
+          "description": "JSON web token for the session",
+          "type": "string",
+          "example": "eyJCJhbGci.eyJhaWwuY29tIn0.32wQOMci"
+        },
+        "relationships": {
+          "description": "JSON API links",
+          "type": "object",
+          "required": [
+            "user"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "user": {
+              "type": "object",
+              "description": "The user associated with the session",
+              "required": [
+                "data"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/user/definitions/data"
+                }
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/session/definitions/type"
+        },
+        "id": {
+          "$ref": "#/definitions/session/definitions/id"
+        },
+        "relationships": {
+          "$ref": "#/definitions/session/definitions/relationships"
+        }
+      }
+    }
+  }
+}
