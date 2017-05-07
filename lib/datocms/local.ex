@@ -1,6 +1,12 @@
 defmodule DatoCMS.Local do
   @page_limit 500
 
+  def site do
+    DatoCMS.start()
+    params = %{"include": "item_types,item_types.fields"}
+    DatoCMS.Site.Site.get(params)
+  end
+
   def items do
     DatoCMS.start()
     fetch(1) |> handle([], 1, nil)
