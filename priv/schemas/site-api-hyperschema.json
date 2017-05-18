@@ -669,6 +669,26 @@
           "title": "Show",
           "description": "Retrieve a site",
           "href": "/site",
+          "schema": {
+            "type": [
+              "object"
+            ],
+            "properties": {
+              "include": {
+                "description": "Type of data to include",
+                "type": [
+                  "array"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 0,
+                "example": [
+                  "item_types"
+                ]
+              }
+            }
+          },
           "targetSchema": {
             "type": "object",
             "required": [
