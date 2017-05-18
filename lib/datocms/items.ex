@@ -1,18 +1,12 @@
-defmodule DatoCMS.Local do
+defmodule DatoCMS.Items do
   @page_limit 500
 
-  def site do
+  def fetch do
     DatoCMS.start()
-    params = %{"include": "item_types,item_types.fields"}
-    DatoCMS.Site.Site.get(params)
+    do_fetch(1) |> handle([], 1, nil)
   end
 
-  def items do
-    DatoCMS.start()
-    fetch(1) |> handle([], 1, nil)
-  end
-
-  defp fetch(page) do
+  defp do_fetch(page) do
     offset = @page_limit * (page - 1)
     params = %{"page[limit]": @page_limit, "page[offset]": offset}
     DatoCMS.Site.Item.index(params)
@@ -29,12 +23,15 @@ defmodule DatoCMS.Local do
     data = response["data"]
     loop(items ++ data, page, total_pages)
   end
+  defp handle({:error, reason}, _items, _page, _total_pages) do
+    {:error, reason}
+  end
 
   defp loop(items, total_pages, total_pages) do
     # Done!
-    items
+    {:ok, items}
   end
   defp loop(items, page, total_pages) do
-    fetch(page + 1) |> handle(items, page + 1, total_pages)
+    do_fetch(page + 1) |> handle(items, page + 1, total_pages)
   end
 end
