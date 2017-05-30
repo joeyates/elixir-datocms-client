@@ -1,7 +1,9 @@
 defmodule DatoCMS.Site do
-  def fetch do
+  require DatoCMS.Client
+
+  def fetch() do
     DatoCMS.start()
     params = %{"include": "item_types,item_types.fields"}
-    DatoCMS.Site.Site.get(params)
+    DatoCMS.Client.Site.get(params)
   end
 end

@@ -1,0 +1,121 @@
+{
+  "data": {
+    "id": "12345",
+    "type": "site",
+    "attributes": {
+      "name": "My Site",
+      "locales": [
+        "it",
+        "en"
+      ],
+      "theme_hue": 190,
+      "domain": "my-admin.example.com",
+      "internal_domain": "foo-bar-123.admin.datocms.com",
+      "global_seo": {
+        "it": {
+          "site_name": "Il mio sito",
+          "title_suffix": " - Il mio sito",
+          "twitter_account": null,
+          "facebook_page_url": null,
+          "fallback_seo": {
+            "title": "Il mio sito",
+            "description": "Dati d'esempio per sito DatoCMS",
+            "image": {
+              "path": "/11/1411111111-favicon.png",
+              "width": 300,
+              "height": 300,
+              "format": "png",
+              "size": 4190
+            }
+          }
+        },
+        "en": {
+          "site_name": "My Site",
+          "title_suffix": " - My Site",
+          "twitter_account": null,
+          "facebook_page_url": null,
+          "fallback_seo": {
+            "title": "My Site",
+            "description": "Example data for a DatoCMS Site",
+            "image": {
+              "path": "/11/1411111111-favicon.png",
+              "width": 300,
+              "height": 300,
+              "format": "png",
+              "size": 4190
+            }
+          }
+        }
+      },
+      "favicon": null,
+      "no_index": false,
+      "frontend_url": null,
+      "ssg": "extatic"
+    },
+    "relationships": {
+      "item_types": {
+        "data": [
+          {
+            "id": "123",
+            "type": "item_type"
+          }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "123",
+      "type": "item_type",
+      "attributes": {
+        "name": "Post",
+        "singleton": false,
+        "sortable": true,
+        "api_key": "post",
+        "ordering_direction": null
+      },
+      "relationships": {
+        "fields": {
+          "data": [
+            {
+              "id": "1234",
+              "type": "field"
+            }
+          ]
+        },
+        "singleton_item": {
+          "data": null
+        },
+        "ordering_field": {
+          "data": null
+        }
+      }
+    },
+    {
+      "id": "1234",
+      "type": "field",
+      "attributes": {
+        "label": "Title",
+        "field_type": "string",
+        "api_key": "title",
+        "hint": null,
+        "localized": false,
+        "validators": {
+          "required": {}
+        },
+        "position": 1,
+        "appeareance": {
+          "type": "title"
+        }
+      },
+      "relationships": {
+        "item_type": {
+          "data": {
+            "id": "123",
+            "type": "item_type"
+          }
+        }
+      }
+    }
+  ]
+}

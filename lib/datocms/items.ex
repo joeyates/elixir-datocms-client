@@ -9,7 +9,7 @@ defmodule DatoCMS.Items do
   defp do_fetch(page) do
     offset = @page_limit * (page - 1)
     params = %{"page[limit]": @page_limit, "page[offset]": offset}
-    DatoCMS.Site.Item.index(params)
+    DatoCMS.Client.Item.index(params)
   end
 
   defp handle({:ok, response}, [], 1, nil) do

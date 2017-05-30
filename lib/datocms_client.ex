@@ -8,7 +8,7 @@ defmodule DatoCMS do
   schema_path = "priv/schemas/site-api-hyperschema.json"
   {:ok, schema_json} = File.read(schema_path)
 
-  defapi "DatoCMS.Site", schema_json
+  defapi "DatoCMS.Client", schema_json
 
   def start() do
     HTTPoison.start()

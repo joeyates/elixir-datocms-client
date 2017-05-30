@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "id": "12345",
+      "type": "item",
+      "attributes": {
+        "updated_at": "2017-01-01T13:29:49.359Z",
+        "is_valid": true,
+        "seo": {
+          "image": {
+            "alt": null,
+            "path": "/11/1111111111-index.jpg",
+            "size": 9525,
+            "title": null,
+            "width": 225,
+            "format": "jpg",
+            "height": 224
+          },
+          "title": "SEO Title",
+          "description": "SEO Description"
+        },
+        "title": "The Title"
+      },
+      "relationships": {
+        "item_type": {
+          "data": {
+            "id": "123",
+            "type": "item_type"
+          }
+        },
+        "last_editor": {
+          "data": {
+            "id": "145",
+            "type": "user"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "total_count": 1
+  }
+}
