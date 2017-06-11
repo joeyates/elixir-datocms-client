@@ -39,7 +39,7 @@ defmodule DatoCMS.InternalizedItemsByType do
           "item_item_type" => %{"item_types" => [item_type_id]}
         }
       }
-    } = field,
+    },
     value,
     internalized_item_types_by_id
   ) do
@@ -55,7 +55,7 @@ defmodule DatoCMS.InternalizedItemsByType do
           "items_item_type" => %{"item_types" => [item_type_id]}
         }
       }
-    } = field,
+    },
     value,
     internalized_item_types_by_id
   ) do
