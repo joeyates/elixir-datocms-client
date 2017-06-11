@@ -6,13 +6,6 @@ defmodule DatoCMS.InternalizedItemTypesById do
       {:ok, v} = DatoCMS.InternalizedItemType.from(i, internalized_fields_by_id)
       v
     end)
-    {:ok, by_id(internalized_item_types)}
-  end
-
-  defp by_id(enumerable) do
-    Enum.reduce(enumerable, %{}, fn (i, acc) ->
-      %{"id" => id} = i
-      put_in(acc, [id], i)
-    end)
+    {:ok, IndexEntities.by_id(internalized_item_types)}
   end
 end

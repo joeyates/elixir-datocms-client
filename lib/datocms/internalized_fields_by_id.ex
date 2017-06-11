@@ -5,13 +5,6 @@ defmodule DatoCMS.InternalizedFieldsById do
       {:ok, v} = DatoCMS.InternalizedField.from(f)
       v
     end)
-    {:ok, by_id(internalized_fields)}
-  end
-
-  defp by_id(enumerable) do
-    Enum.reduce(enumerable, %{}, fn (i, acc) ->
-      %{"id" => id} = i
-      put_in(acc, [id], i)
-    end)
+    {:ok, IndexEntities.by_id(internalized_fields)}
   end
 end
