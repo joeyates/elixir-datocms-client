@@ -20,7 +20,8 @@ defmodule DatocmsClient.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
-      {:json_hyperschema_client_builder, "~> 0.8.0", path: "/home/joe/code/json_hyperschema_client_builder"},
+      {:exjsx, "~> 3.2"},
+      {:json_hyperschema_client_builder, "~> 0.8.1"},
       {:httpoison, "~> 0.11.1"}
     ]
   end
