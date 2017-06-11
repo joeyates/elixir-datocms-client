@@ -15,4 +15,18 @@ defmodule DatoCMS.Repo do
       ]
     }
   end
+
+  def get!(repo, {type, id}) do
+    {:ok, item} = get(repo, {type, id})
+    item
+  end
+
+  def get(repo, {type, ids}) when is_list(ids) do
+    all = repo[:items_by_type][type]
+    {:ok, Enum.map(ids, fn (id) -> all[id] end)}
+  end
+  def get(repo, {type, id}) do
+    all = repo[:items_by_type][type]
+    {:ok, all[id]}
+  end
 end

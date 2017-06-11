@@ -37,12 +37,27 @@ defmodule DatoCMS.Repo.Test do
     DatoCMS.Test.Support.ApplicationEnvironment.set(test_env())
   end
 
-  test "it returns all site data" do
+  test ".load returns all site data" do
     {:ok, repo} = DatoCMS.Repo.load()
     assert(
       Keyword.keys(repo) == [
         :items_by_type, :internalized_item_types_by_id, :site
       ]
     )
+  end
+
+  test "when given a tuple containing a type and id, .get! returns an item" do
+    {:ok, repo} = DatoCMS.Repo.load()
+    item = DatoCMS.Repo.get!(repo, {"category", "12346"})
+
+    assert(%{"id" => "12346", "name" => "The Category"} = item)
+  end
+
+  test "when given a tuple containing a type and array, .get! returns items" do
+    {:ok, repo} = DatoCMS.Repo.load()
+    items = DatoCMS.Repo.get!(repo, {"tag", ["12347"]})
+
+    assert(length(items) == 1)
+    assert(%{"id" => "12347", "name" => "A Tag"} = hd(items))
   end
 end

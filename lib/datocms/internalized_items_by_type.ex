@@ -11,8 +11,9 @@ defmodule DatoCMS.InternalizedItemsByType do
     type_id = get_in(item, ["relationships", "item_type", "data", "id"])
     type_name = internalized_item_types_by_id[type_id]["type_name"]
     internalized = internalize(item, internalized_item_types_by_id)
-    type_items = Map.get(items_by_type, type_name, [])
-    updated = put_in(items_by_type, [type_name], type_items ++ [internalized])
+    type_items = Map.get(items_by_type, type_name, %{})
+    updated_type_items = Map.put(type_items, internalized["id"], internalized)
+    updated = Map.put(items_by_type, type_name, updated_type_items)
     by_type(rest, internalized_item_types_by_id, updated)
   end
 

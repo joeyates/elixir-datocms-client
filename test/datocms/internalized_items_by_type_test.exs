@@ -13,14 +13,14 @@ defmodule DatoCMS.InternalizedItemsByType.Test do
     ]
   end
 
-  test "it groups items by type name", context do
+  test "it groups items by type name and id", context do
     {:ok, collections} =
       DatoCMS.InternalizedItemsByType.from(
         context[:items], context[:internalized_item_types_by_id]
       )
 
     assert(Map.has_key?(collections, "post"))
-    assert(length(collections["post"]) == 1)
+    assert(Map.keys(collections["post"]) == ["12345"])
   end
 
   test "it internalizes items", context do
@@ -28,7 +28,7 @@ defmodule DatoCMS.InternalizedItemsByType.Test do
       context[:items], context[:internalized_item_types_by_id]
     )
 
-    post = hd(collections["post"])
+    post = collections["post"]["12345"]
 
     assert(post["title"] == "The Title")
     assert(post["category"] == {"category", "12346"})
