@@ -1,4 +1,4 @@
-defmodule DatoCMS.RepoTest.FakeHTTPClient do
+defmodule DatoCMS.Repo.FakeHTTPClient do
   import DatoCMS.Test.Support.FixtureHelper
 
   @api_base "https://site-api.datocms.com"
@@ -18,20 +18,20 @@ defmodule DatoCMS.RepoTest.FakeHTTPClient do
   end
 end
 
-defmodule DatoCMS.RepoTest.Data do
+defmodule DatoCMS.Repo.TestData do
   def access_token, do: "access_token"
 
   def test_env() do
     [
       access_token: access_token(),
-      http_client: DatoCMS.RepoTest.FakeHTTPClient
+      http_client: DatoCMS.Repo.FakeHTTPClient
     ]
   end
 end
 
-defmodule DatoCMS.RepoTest do
+defmodule DatoCMS.Repo.Test do
   use ExUnit.Case, async: true
-  import DatoCMS.RepoTest.Data
+  import DatoCMS.Repo.TestData
 
   setup _context do
     DatoCMS.Test.Support.ApplicationEnvironment.set(test_env())
