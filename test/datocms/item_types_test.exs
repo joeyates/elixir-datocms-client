@@ -10,10 +10,8 @@ defmodule DatoCMS.ItemTypes.Test do
   test "it extracts item types from the site", context do
     {:ok, items} = DatoCMS.ItemTypes.from(context[:site])
 
-    assert(length(items) == 1)
+    assert(length(items) == 3)
 
-    first = hd(items)
-
-    assert(%{"id" => "123", "type" => "item_type"} = first)
+    assert(%{"id" => "123", "type" => "item_type"} = Enum.fetch!(items, 0))
   end
 end
