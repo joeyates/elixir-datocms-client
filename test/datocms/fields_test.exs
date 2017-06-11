@@ -10,10 +10,9 @@ defmodule DatoCMS.FieldsTest do
   test "it extracts fields from site info", context do
     {:ok, fields} = DatoCMS.Fields.from(context[:site])
 
-    assert(length(fields) == 1)
+    assert(length(fields) == 5)
 
-    first = hd(fields)
 
-    assert(%{"id" => "1234", "type" => "field"} = first)
+    assert(%{"id" => "1234", "type" => "field"} = Enum.fetch!(fields, 0))
   end
 end

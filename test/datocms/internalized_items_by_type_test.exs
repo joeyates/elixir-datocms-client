@@ -31,5 +31,7 @@ defmodule DatoCMS.InternalizedItemsByType.Test do
     post = hd(collections["post"])
 
     assert(post["title"] == "The Title")
+    assert(post["category"] == {"category", "12346"})
+    assert(post["tags"] == {"tag", ["12347"]})
   end
 end

@@ -19,7 +19,9 @@
           "title": "SEO Title",
           "description": "SEO Description"
         },
-        "title": "The Title"
+        "title": "The Title",
+        "category": "12346",
+        "tags": ["12347"]
       },
       "relationships": {
         "item_type": {
@@ -35,9 +37,79 @@
           }
         }
       }
+    },
+    {
+      "id": "12346",
+      "type": "item",
+      "attributes": {
+        "updated_at": "2017-01-01T13:29:49.359Z",
+        "is_valid": true,
+        "seo": {
+          "image": {
+            "alt": null,
+            "path": "/11/1111111111-index.jpg",
+            "size": 9525,
+            "title": null,
+            "width": 225,
+            "format": "jpg",
+            "height": 224
+          },
+          "name": "The Category"
+        },
+        "name": "The Category"
+      },
+      "relationships": {
+        "item_type": {
+          "data": {
+            "id": "124",
+            "type": "item_type"
+          }
+        },
+        "last_editor": {
+          "data": {
+            "id": "145",
+            "type": "user"
+          }
+        }
+      }
+    },
+    {
+      "id": "12347",
+      "type": "item",
+      "attributes": {
+        "updated_at": "2017-01-01T13:29:49.359Z",
+        "is_valid": true,
+        "seo": {
+          "image": {
+            "alt": null,
+            "path": "/11/1111111111-index.jpg",
+            "size": 9525,
+            "title": null,
+            "width": 225,
+            "format": "jpg",
+            "height": 224
+          },
+          "name": "A Tag"
+        },
+        "name": "A Tag"
+      },
+      "relationships": {
+        "item_type": {
+          "data": {
+            "id": "125",
+            "type": "item_type"
+          }
+        },
+        "last_editor": {
+          "data": {
+            "id": "145",
+            "type": "user"
+          }
+        }
+      }
     }
   ],
   "meta": {
-    "total_count": 1
+    "total_count": 3
   }
 }

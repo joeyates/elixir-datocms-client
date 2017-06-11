@@ -4,11 +4,11 @@ defmodule DatoCMS.InternalizedItemTypeTest do
 
   setup _context do
     site = load_fixture("site")
-    %{"included" => [item_type | [field]]} = site
-    fields_by_id = %{field["id"] => field}
+
+    item_type = hd(site["included"])
+    {:ok, fields_by_id} = DatoCMS.InternalizedFieldsById.from(site)
     [
       item_type: item_type,
-      field: field,
       fields_by_id: fields_by_id
     ]
   end
@@ -31,8 +31,10 @@ defmodule DatoCMS.InternalizedItemTypeTest do
     {:ok, result} = DatoCMS.InternalizedItemType.from(
       context[:item_type], context[:fields_by_id]
     )
-    assert(length(result["fields"]) == 1)
-    first = hd(result["fields"])
-    assert(first == context[:field])
+    fields = result["fields"]
+    assert(length(fields) == 3)
+    assert(Enum.fetch!(fields, 0) == context[:fields_by_id]["1234"])
+    assert(Enum.fetch!(fields, 1) == context[:fields_by_id]["1235"])
+    assert(Enum.fetch!(fields, 2) == context[:fields_by_id]["1236"])
   end
 end

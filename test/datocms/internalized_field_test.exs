@@ -4,7 +4,10 @@ defmodule DatoCMS.InternalizedField.Test do
 
   setup _context do
     site = load_fixture("site")
-    %{"included" => [_item_type | [field]]} = site
+
+    included = site["included"]
+    field = Enum.fetch!(included, 1)
+
     [
       field: field,
     ]

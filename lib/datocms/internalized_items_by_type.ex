@@ -22,10 +22,47 @@ defmodule DatoCMS.InternalizedItemsByType do
     %{"fields" => fields} = item_type
     values = Enum.reduce(fields, %{}, fn (field, acc) ->
       %{"field_name" => field_name} = field
-      %{"attributes" => %{^field_name => value}} = item
+      %{"attributes" => %{^field_name => raw_value}} = item
+      value = field_value(field, raw_value, internalized_item_types_by_id)
       put_in(acc, [field_name], value)
     end)
     %{"id" => id, "attributes" => %{"seo" => seo, "updated_at" => updated_at}} = item
     Map.merge(%{"id" => id, "seo" => seo, "updated_at" => updated_at}, values)
+  end
+
+  defp field_value(
+    %{
+      "attributes" => %{
+        "field_type" => "link",
+        "validators" => %{
+          "item_item_type" => %{"item_types" => [item_type_id]}
+        }
+      }
+    } = field,
+    value,
+    internalized_item_types_by_id
+  ) do
+    item_type = internalized_item_types_by_id[item_type_id]
+    %{"type_name" => linked_type} = item_type
+    {linked_type, value}
+  end
+  defp field_value(
+    %{
+      "attributes" => %{
+        "field_type" => "links",
+        "validators" => %{
+          "items_item_type" => %{"item_types" => [item_type_id]}
+        }
+      }
+    } = field,
+    value,
+    internalized_item_types_by_id
+  ) do
+    item_type = internalized_item_types_by_id[item_type_id]
+    %{"type_name" => linked_type} = item_type
+    {linked_type, value}
+  end
+  defp field_value(_field, value, _internalized_item_types_by_id) do
+    value
   end
 end
