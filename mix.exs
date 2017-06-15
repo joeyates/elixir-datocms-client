@@ -22,7 +22,7 @@ defmodule DatocmsClient.Mixfile do
     [
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
       {:exjsx, "~> 3.2"},
-      {:json_hyperschema_client_builder, "~> 0.8.1"},
+      {:json_hyperschema_client_builder, "~> 0.9.0"},
       {:httpoison, "~> 0.11.1"}
     ]
   end
