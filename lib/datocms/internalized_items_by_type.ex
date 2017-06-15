@@ -27,7 +27,8 @@ defmodule DatoCMS.InternalizedItemsByType do
       value = field_value(field, raw_value, internalized_item_types_by_id)
       put_in(acc, [field_name], value)
     end)
-    %{"id" => id, "attributes" => %{"seo" => seo, "updated_at" => updated_at}} = item
+    seo = item["seo"] || %{}
+    %{"id" => id, "attributes" => %{"updated_at" => updated_at}} = item
     Map.merge(%{"id" => id, "seo" => seo, "updated_at" => updated_at}, values)
   end
 
