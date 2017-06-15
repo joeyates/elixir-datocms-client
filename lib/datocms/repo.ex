@@ -16,6 +16,14 @@ defmodule DatoCMS.Repo do
     }
   end
 
+  def all!(repo, type) do
+    {:ok, all} = all(repo, type)
+    all
+  end
+  def all(repo, type) do
+    {:ok, repo[:items_by_type][type]}
+  end
+
   def get!(repo, {type, id}) do
     {:ok, item} = get(repo, {type, id})
     item
