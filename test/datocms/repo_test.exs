@@ -23,7 +23,7 @@ defmodule DatoCMS.Repo.TestData do
 
   def test_env() do
     [
-      access_token: access_token(),
+      %{headers: ["Authorization": "Bearer #{access_token()}"]},
       http_client: DatoCMS.Repo.FakeHTTPClient
     ]
   end
