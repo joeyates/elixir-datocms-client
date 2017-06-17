@@ -32,9 +32,10 @@ defmodule DatoCMS.InternalizedItemTypeTest do
       context[:item_type], context[:fields_by_id]
     )
     fields = result["fields"]
-    assert(length(fields) == 3)
+    assert(length(fields) == 4)
     assert(Enum.fetch!(fields, 0) == context[:fields_by_id]["1234"])
-    assert(Enum.fetch!(fields, 1) == context[:fields_by_id]["1235"])
-    assert(Enum.fetch!(fields, 2) == context[:fields_by_id]["1236"])
+    assert(Enum.fetch!(fields, 1) == context[:fields_by_id]["1239"])
+    assert(Enum.fetch!(fields, 2) == context[:fields_by_id]["1235"])
+    assert(Enum.fetch!(fields, 3) == context[:fields_by_id]["1236"])
   end
 end

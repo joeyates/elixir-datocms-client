@@ -19,7 +19,11 @@
           "title": "SEO Title",
           "description": "SEO Description"
         },
-        "title": "The Title",
+        "title": {
+          "it": "Il titolo",
+          "en": "The Title"
+        },
+        "body": "Ciao",
         "category": "12346",
         "tags": ["12347"]
       },

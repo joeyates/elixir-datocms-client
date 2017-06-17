@@ -16,12 +16,51 @@ defmodule DatoCMS.Repo do
     }
   end
 
+  def all(repo, type) do
+    {:ok, repo[:items_by_type][type]}
+  end
+
   def all!(repo, type) do
     {:ok, all} = all(repo, type)
     all
   end
-  def all(repo, type) do
-    {:ok, repo[:items_by_type][type]}
+
+  def get(repo, {type, ids}) when is_list(ids) do
+    {:ok, locale} = default_locale(repo)
+    get(repo, {type, ids, locale})
+  end
+  def get(repo, {type, ids, locale}) when is_list(ids) do
+    items = repo[:items_by_type][type]
+    requested = Enum.map(ids, fn (id) ->
+      localize(items[id], locale)
+    end)
+    {:ok, requested}
+  end
+  def get(repo, {type, id}) do
+    {:ok, locale} = default_locale(repo)
+    get(repo, {type, id, locale})
+  end
+  def get(repo, {type, id, locale}) do
+    items = repo[:items_by_type][type]
+    item = localize(items[id], locale)
+    {:ok, item}
+  end
+
+  defp localize(item, locale) do
+    Enum.reduce(item, %{}, fn ({k, v}, acc) ->
+      value = localize_field(k, v, locale)
+      Map.put(acc, k, value)
+    end)
+  end
+
+  defp localize_field("seo", v, locale) do
+    localize(v, locale)
+  end
+  defp localize_field(_k, %{} = v, locale) do
+    v[locale]
+  end
+  defp localize_field(_k, v, _locale) do
+    v
   end
 
   def get!(repo, {type, id}) do
@@ -29,12 +68,14 @@ defmodule DatoCMS.Repo do
     item
   end
 
-  def get(repo, {type, ids}) when is_list(ids) do
-    all = repo[:items_by_type][type]
-    {:ok, Enum.map(ids, fn (id) -> all[id] end)}
-  end
-  def get(repo, {type, id}) do
-    all = repo[:items_by_type][type]
-    {:ok, all[id]}
+  def default_locale(repo) do
+    %{
+      "data" => %{
+        "attributes" => %{
+          "locales" => [first_locale | _]
+        }
+      }
+    } = repo[:site]
+    {:ok, first_locale}
   end
 end
