@@ -10,6 +10,12 @@ defmodule DatocmsClient.Mixfile do
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       elixirc_paths: elixirc_paths(Mix.env),
+      source_url: "https://github.com/joeyates/elixir-datocms-client",
+      homepage_url: "http://github.com/joeyates/elixir-datocms-client",
+      docs: [
+        main: "DatoCMS",
+        extras: ["README.md", "DatoCMS-JSON-responses.md"]
+      ],
       deps: deps()
     ]
   end
