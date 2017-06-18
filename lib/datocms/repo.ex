@@ -1,47 +1,30 @@
 defmodule DatoCMS.Repo do
-  def load do
-    {:ok, site} = DatoCMS.Site.fetch()
-    {:ok, items} = DatoCMS.Items.fetch()
-    {:ok, internalized_item_types_by_id} =
-      DatoCMS.InternalizedItemTypesById.from(site)
-    {:ok, items_by_type} =
-      DatoCMS.InternalizedItemsByType.from(items, internalized_item_types_by_id)
-    {
-      :ok,
-      [
-        items_by_type: items_by_type,
-        internalized_item_types_by_id: internalized_item_types_by_id,
-        site: site
-      ]
-    }
+  def all(state, type) do
+    {:ok, state[:items_by_type][type]}
   end
 
-  def all(repo, type) do
-    {:ok, repo[:items_by_type][type]}
-  end
-
-  def all!(repo, type) do
-    {:ok, all} = all(repo, type)
+  def all!(state, type) do
+    {:ok, all} = all(state, type)
     all
   end
 
-  def get(repo, {type, ids}) when is_list(ids) do
-    {:ok, locale} = default_locale(repo)
-    get(repo, {type, ids, locale})
+  def get(state, {type, ids}) when is_list(ids) do
+    {:ok, locale} = default_locale(state)
+    get(state, {type, ids, locale})
   end
-  def get(repo, {type, ids, locale}) when is_list(ids) do
-    items = repo[:items_by_type][type]
+  def get(state, {type, ids, locale}) when is_list(ids) do
+    items = state[:items_by_type][type]
     requested = Enum.map(ids, fn (id) ->
       localize(items[id], locale)
     end)
     {:ok, requested}
   end
-  def get(repo, {type, id}) do
-    {:ok, locale} = default_locale(repo)
-    get(repo, {type, id, locale})
+  def get(state, {type, id}) do
+    {:ok, locale} = default_locale(state)
+    get(state, {type, id, locale})
   end
-  def get(repo, {type, id, locale}) do
-    items = repo[:items_by_type][type]
+  def get(state, {type, id, locale}) do
+    items = state[:items_by_type][type]
     item = localize(items[id], locale)
     {:ok, item}
   end
@@ -63,19 +46,19 @@ defmodule DatoCMS.Repo do
     v
   end
 
-  def get!(repo, {type, id}) do
-    {:ok, item} = get(repo, {type, id})
+  def get!(state, {type, id}) do
+    {:ok, item} = get(state, {type, id})
     item
   end
 
-  def default_locale(repo) do
+  def default_locale(state) do
     %{
       "data" => %{
         "attributes" => %{
           "locales" => [first_locale | _]
         }
       }
-    } = repo[:site]
+    } = state[:site]
     {:ok, first_locale}
   end
 end
