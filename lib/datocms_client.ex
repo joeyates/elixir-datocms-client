@@ -1,4 +1,4 @@
-defmodule DatoCMS do
+defmodule DatoCMSClient do
   import JSONHyperschema.ClientBuilder
 
   @moduledoc """

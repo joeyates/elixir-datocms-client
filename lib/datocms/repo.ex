@@ -1,32 +1,73 @@
 defmodule DatoCMS.Repo do
-  def all(state, type) do
-    {:ok, state[:items_by_type][type]}
+  use GenServer
+
+  def start_link() do
+    GenServer.start_link(__MODULE__, [], name: :repo)
   end
 
-  def all!(state, type) do
-    {:ok, all} = all(state, type)
+  def put(state) do
+    GenServer.call(:repo, {:put, state})
+  end
+
+  def all(type) do
+    GenServer.call(:repo, {:all, type})
+  end
+
+  def all!(type) do
+    {:ok, all} = all(type)
     all
   end
 
-  def get(state, {type, ids}) when is_list(ids) do
-    {:ok, locale} = default_locale(state)
-    get(state, {type, ids, locale})
+  def get(specifier) do
+    GenServer.call(:repo, {:get, specifier})
   end
-  def get(state, {type, ids, locale}) when is_list(ids) do
+
+  def get!(specifier) do
+    {:ok, result} = get(specifier)
+    result
+  end
+
+  def handle_call({:put, state}, _from, _state) do
+    {:reply, {:ok}, state}
+  end
+  def handle_call({:all, type}, _from, state) do
+    items = state[:items_by_type][type]
+    {:reply, {:ok, items}, state}
+  end
+  def handle_call({:get, specifier}, _from, state) do
+    handle_get(specifier, state)
+  end
+
+  def handle_get({type, ids}, state) when is_list(ids) do
+    {:ok, locale} = default_locale(state)
+    handle_get(state, {type, ids, locale})
+  end
+  def handle_get({type, ids, locale}, state) when is_list(ids) do
     items = state[:items_by_type][type]
     requested = Enum.map(ids, fn (id) ->
       localize(items[id], locale)
     end)
     {:ok, requested}
   end
-  def get(state, {type, id}) do
+  def handle_get({type, id}, state) do
     {:ok, locale} = default_locale(state)
-    get(state, {type, id, locale})
+    handle_get(state, {type, id, locale})
   end
-  def get(state, {type, id, locale}) do
+  def handle_get({type, id, locale}, state) do
     items = state[:items_by_type][type]
     item = localize(items[id], locale)
     {:ok, item}
+  end
+
+  defp default_locale(state) do
+    %{
+      "data" => %{
+        "attributes" => %{
+          "locales" => [first_locale | _]
+        }
+      }
+    } = state[:site]
+    {:ok, first_locale}
   end
 
   defp localize(item, locale) do
@@ -44,21 +85,5 @@ defmodule DatoCMS.Repo do
   end
   defp localize_field(_k, v, _locale) do
     v
-  end
-
-  def get!(state, {type, id}) do
-    {:ok, item} = get(state, {type, id})
-    item
-  end
-
-  def default_locale(state) do
-    %{
-      "data" => %{
-        "attributes" => %{
-          "locales" => [first_locale | _]
-        }
-      }
-    } = state[:site]
-    {:ok, first_locale}
   end
 end
