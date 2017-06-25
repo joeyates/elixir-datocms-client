@@ -3,6 +3,19 @@ defmodule DatoCMS do
 
   @cache_path "tmp/dato.cache"
 
+  @doc false
+  defmacro __using__(_opts) do
+    quote do
+      def dato_get(specifier) do
+        DatoCMS.Repo.get!(specifier)
+      end
+
+      def dato_by_type(type) do
+        DatoCMS.Repo.items_of_type!(type)
+      end
+    end
+  end
+
   def start(_start_type, _args \\ []) do
     DatoCMS.Supervisor.start_link()
   end
