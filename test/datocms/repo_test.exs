@@ -4,14 +4,19 @@ defmodule DatoCMS.Repo.Test do
   import AtomMap
 
   setup _context do
+    on_exit fn ->
+      DatoCMS.put(nil)
+    end
+
     site = load_fixture("site")
     site = atom_map(site)
     %{"data" => items} = load_fixture("items1")
     items = atom_map(items)
 
     {:ok, state} = DatoCMS.Internalizer.internalize(site, items)
+    DatoCMS.Repo.put(state)
 
-    [state: state]
+    :ok
   end
 
   describe ".get" do
