@@ -11,12 +11,12 @@ defmodule DatoCMS.Internalizer.Test do
 
   describe ".load" do
     test "returns all site data", context do
-      {:ok, repo} = DatoCMS.Internalizer.internalize(
+      {:ok, state} = DatoCMS.Internalizer.internalize(
         context[:site], context[:items]
       )
 
       assert(
-        Keyword.keys(repo) == [
+        Keyword.keys(state) == [
           :items_by_type, :internalized_item_types_by_id, :site
         ]
       )

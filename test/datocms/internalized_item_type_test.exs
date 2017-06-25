@@ -1,11 +1,13 @@
 defmodule DatoCMS.InternalizedItemTypeTest do
   use ExUnit.Case, async: true
   import DatoCMS.Test.Support.FixtureHelper
+  import AtomMap
 
   setup _context do
     site = load_fixture("site")
+    site = atom_map(site)
 
-    item_type = hd(site["included"])
+    item_type = hd(site.included)
     {:ok, fields_by_id} = DatoCMS.InternalizedFieldsById.from(site)
     [
       item_type: item_type,
@@ -15,27 +17,27 @@ defmodule DatoCMS.InternalizedItemTypeTest do
 
   test "it sets the type_name", context do
     {:ok, result} = DatoCMS.InternalizedItemType.from(
-      context[:item_type], context[:fields_by_id]
+      context.item_type, context.fields_by_id
     )
-    assert(result["type_name"] == "post")
+    assert(result.type_name == "post")
   end
 
   test "it maintains the id", context do
     {:ok, result} = DatoCMS.InternalizedItemType.from(
-      context[:item_type], context[:fields_by_id]
+      context.item_type, context.fields_by_id
     )
-    assert(result["id"] == "123")
+    assert(result.id == "123")
   end
 
   test "it adds fields as an array", context do
     {:ok, result} = DatoCMS.InternalizedItemType.from(
-      context[:item_type], context[:fields_by_id]
+      context.item_type, context.fields_by_id
     )
-    fields = result["fields"]
+    fields = result.fields
     assert(length(fields) == 4)
-    assert(Enum.fetch!(fields, 0) == context[:fields_by_id]["1234"])
-    assert(Enum.fetch!(fields, 1) == context[:fields_by_id]["1239"])
-    assert(Enum.fetch!(fields, 2) == context[:fields_by_id]["1235"])
-    assert(Enum.fetch!(fields, 3) == context[:fields_by_id]["1236"])
+    assert(Enum.fetch!(fields, 0) == context.fields_by_id[:"1234"])
+    assert(Enum.fetch!(fields, 1) == context.fields_by_id[:"1239"])
+    assert(Enum.fetch!(fields, 2) == context.fields_by_id[:"1235"])
+    assert(Enum.fetch!(fields, 3) == context.fields_by_id[:"1236"])
   end
 end

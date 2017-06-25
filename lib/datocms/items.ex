@@ -2,7 +2,6 @@ defmodule DatoCMS.Items do
   @page_limit 500
 
   def fetch do
-    DatoCMS.start()
     do_fetch(1) |> handle([], 1, nil)
   end
 
