@@ -38,11 +38,19 @@ defmodule DatoCMS.Repo do
     {:reply, {:ok, state}, state}
   end
   def handle_call({:items_of_type, type}, _from, state) do
-    items = state["items_by_type"][type]
+    items = handle_items_of_type(type, state)
     {:reply, {:ok, items}, state}
   end
   def handle_call({:get, specifier}, _from, state) do
     handle_get(specifier, state)
+  end
+
+  def handle_items_of_type(type, state) when is_atom(type) do
+    state[:items_by_type][type]
+  end
+  def handle_items_of_type(type, state) do
+    type_key = AtomKey.to_atom(type)
+    handle_items_of_type(type_key, state)
   end
 
   def handle_get({type, ids}, state) when is_list(ids) do
@@ -50,9 +58,10 @@ defmodule DatoCMS.Repo do
     handle_get({type, ids, locale}, state)
   end
   def handle_get({type, ids, locale}, state) when is_list(ids) do
-    items = state["items_by_type"][type]
+    items = handle_items_of_type(type, state)
     localized_items = Enum.map(ids, fn (id) ->
-      localize(items[id], locale)
+      item_key = AtomKey.to_atom(id)
+      localize(items[item_key], locale)
     end)
     {:reply, {:ok, localized_items}, state}
   end
@@ -61,20 +70,21 @@ defmodule DatoCMS.Repo do
     handle_get({type, id, locale}, state)
   end
   def handle_get({type, id, locale}, state) do
-    items = state["items_by_type"][type]
-    item = localize(items[id], locale)
+    items = handle_items_of_type(type, state)
+    item_key = AtomKey.to_atom(id)
+    item = localize(items[item_key], locale)
     {:reply, {:ok, item}, state}
   end
 
   defp default_locale(state) do
     %{
-      "data" => %{
-        "attributes" => %{
-          "locales" => [first_locale | _]
+      data: %{
+        attributes: %{
+          locales: [first_locale | _]
         }
       }
     } = state[:site]
-    {:ok, first_locale}
+    {:ok, AtomKey.to_atom(first_locale)}
   end
 
   defp localize(item, locale) do
@@ -84,7 +94,7 @@ defmodule DatoCMS.Repo do
     end)
   end
 
-  defp localize_field("seo", v, locale) do
+  defp localize_field(:seo, v, locale) do
     localize(v, locale)
   end
   defp localize_field(_k, %{} = v, locale) do

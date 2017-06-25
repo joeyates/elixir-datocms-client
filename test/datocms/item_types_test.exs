@@ -1,9 +1,11 @@
 defmodule DatoCMS.ItemTypes.Test do
   use ExUnit.Case, async: true
   import DatoCMS.Test.Support.FixtureHelper
+  import AtomMap
 
   setup _context do
     site = load_fixture("site")
+    site = atom_map(site)
     [site: site]
   end
 
@@ -12,6 +14,6 @@ defmodule DatoCMS.ItemTypes.Test do
 
     assert(length(items) == 3)
 
-    assert(%{"id" => "123", "type" => "item_type"} = Enum.fetch!(items, 0))
+    assert(%{id: "123", type: "item_type"} = Enum.fetch!(items, 0))
   end
 end
