@@ -21,7 +21,10 @@ defmodule DatocmsClient.Mixfile do
   end
 
   def application do
-    [extra_applications: [:httpoison, :logger]]
+    [
+      extra_applications: [:httpoison, :logger],
+      mod: {DatoCMS, []}
+    ]
   end
 
   defp deps do
