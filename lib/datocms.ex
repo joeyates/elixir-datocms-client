@@ -10,6 +10,10 @@ defmodule DatoCMS do
         DatoCMS.Repo.get!(specifier)
       end
 
+      def dato_page(name) do
+        DatoCMS.Repo.get!({name})
+      end
+
       def dato_by_type(type) do
         DatoCMS.Repo.items_of_type!(type)
       end

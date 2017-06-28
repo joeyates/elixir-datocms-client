@@ -65,6 +65,17 @@ defmodule DatoCMS.Repo do
     end)
     {:reply, {:ok, localized_items}, state}
   end
+  def handle_get({type, locale}, state) when is_atom(locale) do
+    items = handle_items_of_type(type, state)
+    first = hd(Map.keys(items))
+    item_key = AtomKey.to_atom(first)
+    item = localize(items[item_key], locale)
+    {:reply, {:ok, item}, state}
+  end
+  def handle_get({type}, state) do
+    {:ok, locale} = default_locale(state)
+    handle_get({type, locale}, state)
+  end
   def handle_get({type, id}, state) do
     {:ok, locale} = default_locale(state)
     handle_get({type, id, locale}, state)
