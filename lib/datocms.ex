@@ -35,6 +35,10 @@ defmodule DatoCMS do
     {:ok} = DatoCMS.Repo.put(state)
   end
 
+  def all do
+    DatoCMS.Repo.all!()
+  end
+
   def cache do
     {:ok, state} = DatoCMS.Repo.all()
     path = Path.dirname(@cache_path)

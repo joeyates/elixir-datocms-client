@@ -13,6 +13,11 @@ defmodule DatoCMS.Repo do
     GenServer.call(:repo, {:all})
   end
 
+  def all! do
+    {:ok, state} = all()
+    state
+  end
+
   def items_of_type(type) do
     GenServer.call(:repo, {:items_of_type, type})
   end
