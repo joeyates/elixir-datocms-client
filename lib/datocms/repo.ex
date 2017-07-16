@@ -18,13 +18,13 @@ defmodule DatoCMS.Repo do
     state
   end
 
-  def items_of_type(type) do
-    GenServer.call(:repo, {:items_of_type, type})
+  def localized_items_of_type(type, locale) do
+    GenServer.call(:repo, {:localized_items_of_type, type, locale})
   end
 
-  def items_of_type!(type) do
-    {:ok, items_of_type} = items_of_type(type)
-    items_of_type
+  def localized_items_of_type!(type, locale) do
+    {:ok, localized_items_of_type} = localized_items_of_type(type, locale)
+    localized_items_of_type
   end
 
   def get(specifier) do
@@ -42,8 +42,11 @@ defmodule DatoCMS.Repo do
   def handle_call({:all}, _from, state) do
     {:reply, {:ok, state}, state}
   end
-  def handle_call({:items_of_type, type}, _from, state) do
-    items = handle_items_of_type(type, state)
+  def handle_call({:localized_items_of_type, type, locale}, _from, state) do
+    unlocalized = handle_items_of_type(type, state)
+    items = Enum.map(unlocalized, fn ({_id, item}) ->
+      localize(item, locale)
+    end)
     {:reply, {:ok, items}, state}
   end
   def handle_call({:get, specifier}, _from, state) do
@@ -103,13 +106,16 @@ defmodule DatoCMS.Repo do
     {:ok, AtomKey.to_atom(first_locale)}
   end
 
-  defp localize(item, locale) do
+  def localize(item, locale) do
     Enum.reduce(item, %{}, fn ({k, v}, acc) ->
       value = localize_field(k, v, locale)
       Map.put(acc, k, value)
     end)
   end
 
+  defp localize_field(:seo, nil, _locale) do
+    nil
+  end
   defp localize_field(:seo, v, locale) do
     localize(v, locale)
   end

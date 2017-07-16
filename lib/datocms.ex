@@ -14,8 +14,8 @@ defmodule DatoCMS do
         DatoCMS.Repo.get!({name})
       end
 
-      def dato_by_type(type) do
-        DatoCMS.Repo.items_of_type!(type)
+      def dato_by_type(type, locale) do
+        DatoCMS.Repo.localized_items_of_type!(type, locale)
       end
     end
   end
