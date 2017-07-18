@@ -45,6 +45,15 @@ defmodule DatoCMS.Repo do
     result
   end
 
+  def item_type(type) do
+    GenServer.call(:repo, {:item_type, type})
+  end
+
+  def item_type!(type) do
+    {:ok, result} = item_type(type)
+    result
+  end
+
   def handle_call({:put, state}, _from, _state) do
     {:reply, {:ok}, state}
   end
@@ -64,6 +73,13 @@ defmodule DatoCMS.Repo do
   end
   def handle_call({:get, specifier}, _from, state) do
     handle_get(specifier, state)
+  end
+  def handle_call({:item_type, type}, _from, state) do
+    item_types = state[:internalized_item_types_by_id]
+    # TODO: optimize
+    type_name = Atom.to_string(type)
+    {_id, item_type} = Enum.find(item_types, fn ({_id, t}) -> t.type_name == type_name end)
+    handle_item_type(item_type, state)
   end
 
   def handle_items_of_type(type, state) when is_atom(type) do
@@ -106,6 +122,10 @@ defmodule DatoCMS.Repo do
     item_key = AtomKey.to_atom(id)
     item = localize(items[item_key], locale)
     {:reply, {:ok, item}, state}
+  end
+
+  def handle_item_type(item_type, state) do
+    {:reply, {:ok, item_type}, state}
   end
 
   defp default_locale(state) do
