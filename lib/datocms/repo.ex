@@ -18,6 +18,15 @@ defmodule DatoCMS.Repo do
     state
   end
 
+  def site do
+    GenServer.call(:repo, {:site})
+  end
+
+  def site! do
+    {:ok, site} = site()
+    site
+  end
+
   def localized_items_of_type(type, locale) do
     GenServer.call(:repo, {:localized_items_of_type, type, locale})
   end
@@ -41,6 +50,10 @@ defmodule DatoCMS.Repo do
   end
   def handle_call({:all}, _from, state) do
     {:reply, {:ok, state}, state}
+  end
+  def handle_call({:site}, _from, state) do
+    site = state[:site]
+    {:reply, {:ok, site}, state}
   end
   def handle_call({:localized_items_of_type, type, locale}, _from, state) do
     unlocalized = handle_items_of_type(type, state)
