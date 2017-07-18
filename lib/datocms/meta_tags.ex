@@ -19,6 +19,11 @@ defmodule DatoCMS.MetaTags do
     site = site()
     build_tags(item, item_type, site, locale)
   end
+  def for_item(item, locale) do
+    item_type = item_type(type)
+    site = site()
+    build_tags(item, item_type, site, locale)
+  end
 
   defp item(specifier), do: DatoCMS.Repo.get!(specifier)
   defp item_type(type), do: DatoCMS.Repo.item_type!(type)
