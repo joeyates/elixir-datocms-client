@@ -1,5 +1,5 @@
 defmodule DatoCMS.Repo.Test do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   import DatoCMS.Test.Support.FixtureHelper
   import AtomMap
 
