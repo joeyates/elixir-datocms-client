@@ -17,6 +17,21 @@ defmodule DatoCMS do
       def dato_by_type(type, locale) do
         DatoCMS.Repo.localized_items_of_type!(type, locale)
       end
+
+      def dato_meta_tags(specifier, locale) do
+        {:ok, tags} = DatoCMS.MetaTags.for_item(specifier, locale)
+        Enum.map(tags, fn (tag) ->
+          tag.attributes || %{}
+          |> Enum.map(attrs, fn ({k, v}) -> "\"#{k}\"=\"#{v}\"" end)
+          |> Enum.join(" ")
+          if tag.content do
+            "<#{tag.tag_name} #{attributes}>#{tag.content}</#{tag.tag_name}>\n"
+          else
+            "<#{tag.tag_name} #{attributes}/>\n"
+          end
+        end)
+        |> Enum.join("\n")
+      end
     end
   end
 
