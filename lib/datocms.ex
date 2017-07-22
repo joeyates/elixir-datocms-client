@@ -21,16 +21,20 @@ defmodule DatoCMS do
       def dato_meta_tags(specifier, locale) do
         {:ok, tags} = DatoCMS.MetaTags.for_item(specifier, locale)
         Enum.map(tags, fn (tag) ->
-          tag.attributes || %{}
-          |> Enum.map(attrs, fn ({k, v}) -> "\"#{k}\"=\"#{v}\"" end)
-          |> Enum.join(" ")
-          if tag.content do
-            "<#{tag.tag_name} #{attributes}>#{tag.content}</#{tag.tag_name}>\n"
+          attributes = if tag[:attributes] do
+              tag[:attributes]
+              |> Enum.map(fn ({k, v}) -> "#{k}=\"#{v}\"" end)
+              |> Enum.join(" ")
+            else
+              ""
+            end
+          if tag[:content] do
+            "<#{tag.tag_name} #{attributes}>#{tag.content}</#{tag.tag_name}>"
           else
-            "<#{tag.tag_name} #{attributes}/>\n"
+            "<#{tag.tag_name} #{attributes}/>"
           end
         end)
-        |> Enum.join("\n")
+        |> Enum.join("")
       end
     end
   end
