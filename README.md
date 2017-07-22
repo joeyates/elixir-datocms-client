@@ -74,3 +74,53 @@ structures:
 * `:site` - general information about the site;
 * `:internalized_item_types_by_id` - the structure of each item type;
 * `:items_by_type` - the data, grouped by item type.
+
+## Data Structures
+
+### Internalized Item
+
+```
+{
+  id: "12345",
+  item_type: :post,
+  type: "item",
+  attributes: {
+    updated_at: "2017-01-01T13:29:49.359Z",
+    is_valid: true,
+    seo: {
+      image: {
+        alt: null,
+        path: "/11/1111111111-index.jpg",
+        size: 9525,
+        title: null,
+        width: 225,
+        format: "jpg",
+        height: 224
+      },
+      title: "SEO Title",
+      description: "SEO Description"
+    },
+    title: {
+      it: "Il titolo",
+      en: "The Title"
+    },
+    body: "Ciao",
+    category: "12346",
+    tags: ["12347"]
+  },
+  relationships: {
+    item_type: {
+      data: {
+        id: "123",
+        type: "item_type"
+      }
+    },
+    last_editor: {
+      data: {
+        id: "145",
+        type: "user"
+      }
+    }
+  }
+}
+```
