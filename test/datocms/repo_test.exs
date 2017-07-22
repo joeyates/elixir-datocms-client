@@ -64,7 +64,7 @@ defmodule DatoCMS.Repo.Test do
     test "when given a known id returns an item" do
       item = DatoCMS.Repo.get!({:category, "12346"})
 
-      assert(%{id: "12346", name: "The Category"} = item)
+      assert(%{id: "12346", name: "The Category", item_type: :category} = item)
     end
   end
 end

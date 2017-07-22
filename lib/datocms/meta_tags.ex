@@ -20,6 +20,7 @@ defmodule DatoCMS.MetaTags do
     build_tags(item, item_type, site, locale)
   end
   def for_item(item, locale) do
+    type = item.item_type
     item_type = item_type(type)
     site = site()
     build_tags(item, item_type, site, locale)

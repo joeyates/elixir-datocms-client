@@ -6,7 +6,6 @@ defmodule DatoCMS.InternalizedItemsByType do
   defp by_type([], _internalized_item_types_by_id, items_by_type) do
     {:ok, items_by_type}
   end
-
   defp by_type([item | rest], internalized_item_types_by_id, items_by_type) do
     type_id = get_in(item, [:relationships, :item_type, :data, :id])
     type_id_key = AtomKey.to_atom(type_id)
@@ -32,9 +31,10 @@ defmodule DatoCMS.InternalizedItemsByType do
       value = field_value(field, raw_value, internalized_item_types_by_id)
       put_in(acc, [name], value)
     end)
+    item_type_atom = AtomKey.to_atom(item_type.type_name)
     seo = item[:seo] || %{}
     %{id: id, attributes: %{updated_at: updated_at}} = item
-    Map.merge(%{id: id, seo: seo, updated_at: updated_at}, values)
+    Map.merge(%{id: id, item_type: item_type_atom, seo: seo, updated_at: updated_at}, values)
   end
 
   defp field_value(

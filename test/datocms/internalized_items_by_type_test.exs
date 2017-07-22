@@ -34,6 +34,7 @@ defmodule DatoCMS.InternalizedItemsByType.Test do
 
     post = collections.post[:"12345"]
 
+    assert(post.item_type == :post)
     assert(post.title == %{en: "The Title", it: "Il titolo"})
     assert(post.category == {:category, "12346"})
     assert(post.tags == {:tag, ["12347"]})
