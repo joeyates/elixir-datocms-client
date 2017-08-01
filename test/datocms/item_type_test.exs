@@ -1,4 +1,4 @@
-defmodule DatoCMS.InternalizedItemTypeTest do
+defmodule DatoCMS.ItemType.Test do
   use ExUnit.Case, async: true
   import DatoCMS.Test.Support.FixtureHelper
   import AtomMap
@@ -8,7 +8,7 @@ defmodule DatoCMS.InternalizedItemTypeTest do
     site = atom_map(site)
 
     item_type = hd(site.included)
-    {:ok, fields_by_id} = DatoCMS.InternalizedFieldsById.from(site)
+    {:ok, fields_by_id} = DatoCMS.FieldsById.from(site)
     [
       item_type: item_type,
       fields_by_id: fields_by_id
@@ -16,21 +16,21 @@ defmodule DatoCMS.InternalizedItemTypeTest do
   end
 
   test "it sets the type_name", context do
-    {:ok, result} = DatoCMS.InternalizedItemType.from(
+    {:ok, result} = DatoCMS.ItemType.from(
       context.item_type, context.fields_by_id
     )
     assert(result.type_name == "post")
   end
 
   test "it maintains the id", context do
-    {:ok, result} = DatoCMS.InternalizedItemType.from(
+    {:ok, result} = DatoCMS.ItemType.from(
       context.item_type, context.fields_by_id
     )
     assert(result.id == "123")
   end
 
   test "it adds fields as an array", context do
-    {:ok, result} = DatoCMS.InternalizedItemType.from(
+    {:ok, result} = DatoCMS.ItemType.from(
       context.item_type, context.fields_by_id
     )
     fields = result.fields

@@ -1,4 +1,4 @@
-defmodule DatoCMS.InternalizedItemsByType.Test do
+defmodule DatoCMS.ItemsByType.Test do
   use ExUnit.Case, async: true
   import DatoCMS.Test.Support.FixtureHelper
   import AtomMap
@@ -8,19 +8,19 @@ defmodule DatoCMS.InternalizedItemsByType.Test do
     site = atom_map(site)
     item_data = load_fixture("items1")
     item_data = atom_map(item_data)
-    {:ok, internalized_item_types_by_id} =
-      DatoCMS.InternalizedItemTypesById.from(site)
+    {:ok, item_types_by_id} =
+      DatoCMS.ItemTypesById.from(site)
 
     [
       items: item_data[:data],
-      internalized_item_types_by_id: internalized_item_types_by_id
+      item_types_by_id: item_types_by_id
     ]
   end
 
   test "it groups items by type name and id", context do
     {:ok, collections} =
-      DatoCMS.InternalizedItemsByType.from(
-        context[:items], context[:internalized_item_types_by_id]
+      DatoCMS.ItemsByType.from(
+        context[:items], context[:item_types_by_id]
       )
 
     assert(Map.has_key?(collections, :post))
@@ -28,8 +28,8 @@ defmodule DatoCMS.InternalizedItemsByType.Test do
   end
 
   test "it internalizes items", context do
-    {:ok, collections} = DatoCMS.InternalizedItemsByType.from(
-      context.items, context.internalized_item_types_by_id
+    {:ok, collections} = DatoCMS.ItemsByType.from(
+      context.items, context.item_types_by_id
     )
 
     post = collections.post[:"12345"]

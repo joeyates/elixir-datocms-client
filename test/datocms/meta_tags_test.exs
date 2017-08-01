@@ -13,7 +13,7 @@ defmodule DatoCMS.MetaTags.Test do
     %{"data" => items} = load_fixture("items1")
     items = atom_map(items)
 
-    {:ok, state} = DatoCMS.Internalizer.internalize(site, items)
+    {:ok, state} = DatoCMS.Transformer.internalize(site, items)
     DatoCMS.Repo.put(state)
 
     :ok

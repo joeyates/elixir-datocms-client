@@ -85,7 +85,7 @@ defmodule DatoCMS.Repo do
     handle_get(specifier, locale, state)
   end
   def handle_call({:item_type, type}, _from, state) do
-    item_types = state[:internalized_item_types_by_id]
+    item_types = state[:item_types_by_id]
     # TODO: optimize
     type_name = Atom.to_string(type)
     {_id, item_type} = Enum.find(item_types, fn ({_id, t}) -> t.type_name == type_name end)

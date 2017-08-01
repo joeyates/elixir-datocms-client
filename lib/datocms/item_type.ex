@@ -1,4 +1,4 @@
-defmodule DatoCMS.InternalizedItemType do
+defmodule DatoCMS.ItemType do
   def from(item_type, fields_by_id) do
     %{id: id, attributes: %{api_key: type_name}} = item_type
     fields = build_fields(item_type, fields_by_id)

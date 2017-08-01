@@ -1,4 +1,4 @@
-defmodule DatoCMS.InternalizedField.Test do
+defmodule DatoCMS.TransformField.Test do
   use ExUnit.Case, async: true
   import DatoCMS.Test.Support.FixtureHelper
   import AtomMap
@@ -14,12 +14,12 @@ defmodule DatoCMS.InternalizedField.Test do
   end
 
   test "it maintains the id", context do
-    {:ok, result} = DatoCMS.InternalizedField.from(context[:field])
+    {:ok, result} = DatoCMS.TransformField.from(context[:field])
     assert(result.id == "1234")
   end
 
   test "it sets the field_name", context do
-    {:ok, result} = DatoCMS.InternalizedField.from(context[:field])
+    {:ok, result} = DatoCMS.TransformField.from(context[:field])
     assert(result.field_name == "title")
   end
 end

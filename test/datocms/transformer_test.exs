@@ -1,4 +1,4 @@
-defmodule DatoCMS.Internalizer.Test do
+defmodule DatoCMS.Transformer.Test do
   use ExUnit.Case, async: true
   import DatoCMS.Test.Support.FixtureHelper
 
@@ -11,13 +11,13 @@ defmodule DatoCMS.Internalizer.Test do
 
   describe ".load" do
     test "returns all site data", context do
-      {:ok, state} = DatoCMS.Internalizer.internalize(
+      {:ok, state} = DatoCMS.Transformer.internalize(
         context[:site], context[:items]
       )
 
       assert(
         Keyword.keys(state) == [
-          :items_by_type, :internalized_item_types_by_id, :site
+          :items_by_type, :item_types_by_id, :site
         ]
       )
     end

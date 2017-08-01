@@ -64,7 +64,7 @@ defmodule DatoCMS do
   def load do
     {:ok, site} = DatoCMS.Site.fetch()
     {:ok, items} = DatoCMS.Items.fetch()
-    {:ok, state} = DatoCMS.Internalizer.internalize(site, items)
+    {:ok, state} = DatoCMS.Transformer.internalize(site, items)
     {:ok} = put(state)
   end
 

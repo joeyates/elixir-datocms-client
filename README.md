@@ -72,7 +72,7 @@ A site's data is stored internally as a `keyword list` containing 3 data
 structures:
 
 * `:site` - general information about the site;
-* `:internalized_item_types_by_id` - the structure of each item type;
+* `:item_types_by_id` - the structure of each item type;
 * `:items_by_type` - the data, grouped by item type.
 
 ## Data Structures
