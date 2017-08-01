@@ -33,7 +33,7 @@ defmodule DatoCMS.Repo.Test do
     end
 
     test "when given a tuple containing type, id and locale, it localizes in the given locale" do
-      {:ok, item} = DatoCMS.Repo.get({:post, "12345", :en})
+      {:ok, item} = DatoCMS.Repo.get({:post, "12345"}, :en)
 
       assert(%{title: "The Title"} = item)
     end

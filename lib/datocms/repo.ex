@@ -37,11 +37,18 @@ defmodule DatoCMS.Repo do
   end
 
   def get(specifier) do
-    GenServer.call(:repo, {:get, specifier})
+    GenServer.call(:repo, {:get, {specifier}})
+  end
+  def get(specifier, locale) do
+    GenServer.call(:repo, {:get, {specifier, locale}})
   end
 
   def get!(specifier) do
     {:ok, result} = get(specifier)
+    result
+  end
+  def get!(specifier, locale) do
+    {:ok, result} = get(specifier, locale)
     result
   end
 
@@ -71,8 +78,11 @@ defmodule DatoCMS.Repo do
     end)
     {:reply, {:ok, items}, state}
   end
-  def handle_call({:get, specifier}, _from, state) do
+  def handle_call({:get, {specifier}}, _from, state) do
     handle_get(specifier, state)
+  end
+  def handle_call({:get, {specifier, locale}}, _from, state) do
+    handle_get(specifier, locale, state)
   end
   def handle_call({:item_type, type}, _from, state) do
     item_types = state[:internalized_item_types_by_id]
@@ -90,11 +100,7 @@ defmodule DatoCMS.Repo do
     handle_items_of_type(type_key, state)
   end
 
-  def handle_get({type, ids}, state) when is_list(ids) do
-    {:ok, locale} = default_locale(state)
-    handle_get({type, ids, locale}, state)
-  end
-  def handle_get({type, ids, locale}, state) when is_list(ids) do
+  def handle_get({type, ids}, locale, state) when is_list(ids) do
     items = handle_items_of_type(type, state)
     localized_items = Enum.map(ids, fn (id) ->
       item_key = AtomKey.to_atom(id)
@@ -102,26 +108,30 @@ defmodule DatoCMS.Repo do
     end)
     {:reply, {:ok, localized_items}, state}
   end
-  def handle_get({type, locale}, state) when is_atom(locale) do
+  def handle_get({type, id}, locale, state) do
+    items = handle_items_of_type(type, state)
+    item_key = AtomKey.to_atom(id)
+    item = localize(items[item_key], locale)
+    {:reply, {:ok, item}, state}
+  end
+  def handle_get({type}, locale, state) do
     items = handle_items_of_type(type, state)
     first = hd(Map.keys(items))
     item_key = AtomKey.to_atom(first)
     item = localize(items[item_key], locale)
     {:reply, {:ok, item}, state}
   end
-  def handle_get({type}, state) do
+  def handle_get({type, ids}, state) when is_list(ids) do
     {:ok, locale} = default_locale(state)
-    handle_get({type, locale}, state)
+    handle_get({type, ids}, locale, state)
   end
   def handle_get({type, id}, state) do
     {:ok, locale} = default_locale(state)
-    handle_get({type, id, locale}, state)
+    handle_get({type, id}, locale, state)
   end
-  def handle_get({type, id, locale}, state) do
-    items = handle_items_of_type(type, state)
-    item_key = AtomKey.to_atom(id)
-    item = localize(items[item_key], locale)
-    {:reply, {:ok, item}, state}
+  def handle_get({type}, state) do
+    {:ok, locale} = default_locale(state)
+    handle_get({type}, locale, state)
   end
 
   def handle_item_type(item_type, state) do

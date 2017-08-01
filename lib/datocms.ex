@@ -6,12 +6,30 @@ defmodule DatoCMS do
   @doc false
   defmacro __using__(_opts) do
     quote do
-      def dato_get(specifier) do
+      def dato_get({_type} = specifier, locale) do
+        DatoCMS.Repo.get!(specifier, locale)
+      end
+      def dato_get({_type, _id} = specifier, locale) do
+        DatoCMS.Repo.get!(specifier, locale)
+      end
+      def dato_get({_type} = specifier) do
         DatoCMS.Repo.get!(specifier)
+      end
+      def dato_get({_type, _id} = specifier) do
+        DatoCMS.Repo.get!(specifier)
+      end
+      def dato_get(type, locale) do
+        DatoCMS.Repo.get!({type}, locale)
+      end
+      def dato_get(type) do
+        DatoCMS.Repo.get!({type})
       end
 
       def dato_page(name) do
         DatoCMS.Repo.get!({name})
+      end
+      def dato_page(name, locale) do
+        DatoCMS.Repo.get!({name}, locale)
       end
 
       def dato_by_type(type, locale) do
