@@ -6,4 +6,12 @@ defmodule IndexEntities do
       put_in(acc, [id_key], i)
     end)
   end
+
+  def by_key(entities, key) do
+    Enum.reduce(entities, %{}, fn (item, acc) ->
+      key_value = item[key]
+      key_atom = AtomKey.to_atom(key_value)
+      put_in(acc, [key_atom], item)
+    end)
+  end
 end

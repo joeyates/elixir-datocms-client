@@ -16,9 +16,7 @@ defmodule DatoCMS.Transformer.Test do
       )
 
       assert(
-        Keyword.keys(state) == [
-          :items_by_type, :item_types_by_id, :site
-        ]
+        Keyword.keys(state) == [:items_by_type, :item_types_by_type, :site]
       )
     end
   end
