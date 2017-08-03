@@ -8,19 +8,19 @@ defmodule DatoCMS.ItemsByType.Test do
     site = atom_map(site)
     item_data = load_fixture("items1")
     item_data = atom_map(item_data)
-    {:ok, item_types} =
+    {:ok, item_types_by_type} =
       DatoCMS.ItemTypesByType.from(site)
 
     [
       items: item_data[:data],
-      item_types: item_types
+      item_types_by_type: item_types_by_type
     ]
   end
 
   test "it groups items by type name and id", context do
     {:ok, collections} =
       DatoCMS.ItemsByType.from(
-        context[:items], context[:item_types]
+        context[:items], context[:item_types_by_type]
       )
 
     assert(Map.has_key?(collections, :post))
@@ -29,7 +29,7 @@ defmodule DatoCMS.ItemsByType.Test do
 
   test "it internalizes items", context do
     {:ok, collections} = DatoCMS.ItemsByType.from(
-      context.items, context.item_types
+      context.items, context.item_types_by_type
     )
 
     post = collections.post[:"12345"]
