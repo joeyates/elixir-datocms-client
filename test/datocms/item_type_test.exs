@@ -19,7 +19,7 @@ defmodule DatoCMS.ItemType.Test do
     {:ok, result} = DatoCMS.ItemType.from(
       context.item_type, context.fields_by_id
     )
-    assert(result.type_name == "post")
+    assert(result.type_name == :post)
   end
 
   test "it maintains the id", context do

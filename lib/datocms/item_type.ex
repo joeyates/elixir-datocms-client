@@ -1,6 +1,7 @@
 defmodule DatoCMS.ItemType do
   def from(item_type, fields_by_id) do
-    %{id: id, attributes: %{api_key: type_name}} = item_type
+    %{id: id, attributes: %{api_key: api_key}} = item_type
+    type_name = AtomKey.to_atom(api_key)
     fields = build_fields(item_type, fields_by_id)
     {:ok, %{id: id, type_name: type_name, fields: fields}}
   end
