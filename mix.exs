@@ -4,7 +4,7 @@ defmodule DatocmsClient.Mixfile do
   def project do
     [
       app: :datocms_client,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.4",
       name: "DatoCMS",
       build_embedded: Mix.env == :prod,

@@ -8,6 +8,9 @@ defmodule DatoCMS.Transformer do
       DatoCMS.ItemTypesByType.from(site)
     {:ok, items_by_type} =
       DatoCMS.ItemsByType.from(items, item_types_by_type)
+    {:ok, items_by_type} =
+      DatoCMS.AddMissingSlugs.to(items_by_type, item_types_by_type)
+
     {
       :ok,
       [
