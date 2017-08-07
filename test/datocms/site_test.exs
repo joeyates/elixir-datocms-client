@@ -3,7 +3,7 @@ defmodule DatoCMS.SiteTest.FakeHTTPClient do
 
   @api_base "https://site-api.datocms.com"
 
-  def request(_method, url, _body, _options) do
+  def request(_method, url, _body, _headers, _options) do
     respond(url)
   end
 
