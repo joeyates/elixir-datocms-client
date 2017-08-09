@@ -31,7 +31,7 @@ defmodule DatoCMS.ItemsTest do
 
   setup _context do
     DatoCMS.Test.Support.ApplicationEnvironment.set(test_env())
-    items = load_fixture("items1")
+    items = read_fixture("items1") |> JSX.decode!
     [items: items]
   end
 

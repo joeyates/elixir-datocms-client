@@ -31,7 +31,7 @@ defmodule DatoCMS.SiteTest do
 
   setup _context do
     DatoCMS.Test.Support.ApplicationEnvironment.set(test_env())
-    site = load_fixture("site")
+    site = read_fixture("site") |> JSX.decode!
     [site: site]
   end
 

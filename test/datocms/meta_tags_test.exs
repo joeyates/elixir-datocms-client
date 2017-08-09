@@ -1,7 +1,6 @@
 defmodule DatoCMS.MetaTags.Test do
   use ExUnit.Case, async: false
   import DatoCMS.Test.Support.FixtureHelper
-  import AtomMap
 
   setup _context do
     on_exit fn ->
@@ -9,9 +8,7 @@ defmodule DatoCMS.MetaTags.Test do
     end
 
     site = load_fixture("site")
-    site = atom_map(site)
-    %{"data" => items} = load_fixture("items1")
-    items = atom_map(items)
+    %{data: items} = load_fixture("items1")
 
     {:ok, state} = DatoCMS.Transformer.internalize(site, items)
     DatoCMS.Repo.put(state)

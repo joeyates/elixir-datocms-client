@@ -1,11 +1,9 @@
 defmodule DatoCMS.ItemTypesByType.Test do
   use ExUnit.Case, async: true
   import DatoCMS.Test.Support.FixtureHelper
-  import AtomMap
 
   setup _context do
     site = load_fixture("site")
-    site = atom_map(site)
     [site: site]
   end
 

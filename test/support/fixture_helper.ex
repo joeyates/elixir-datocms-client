@@ -7,7 +7,9 @@ defmodule DatoCMS.Test.Support.FixtureHelper do
   end
 
   def load_fixture(name) do
-    read_fixture(name)
+    {:ok, data} = read_fixture(name)
     |> JSX.decode!
+    |> Morphix.atomorphiform
+    data
   end
 end

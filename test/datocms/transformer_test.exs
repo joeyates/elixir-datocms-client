@@ -4,7 +4,7 @@ defmodule DatoCMS.Transformer.Test do
 
   setup _context do
     site = load_fixture("site")
-    %{"data" => items} = load_fixture("items1")
+    %{data: items} = load_fixture("items1")
 
     [site: site, items: items]
   end

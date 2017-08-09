@@ -1,9 +1,7 @@
 defmodule DatoCMS.Transformer do
-  import AtomMap
-
   def internalize(site, items) do
-    site = atom_map(site)
-    items = atom_map(items)
+    site = atomize(site)
+    items = atomize(items)
     {:ok, item_types_by_type} =
       DatoCMS.ItemTypesByType.from(site)
     {:ok, items_by_type} =
@@ -20,4 +18,12 @@ defmodule DatoCMS.Transformer do
       ]
     }
   end
+
+  defp atomize(data) when is_list(data) do
+    Enum.map(data, &atomize/1)
+  end
+  defp atomize(data) when is_map(data) do
+    elem(Morphix.atomorphiform(data), 1)
+  end
+  defp atomize(data), do: data
 end
