@@ -11,7 +11,11 @@ defmodule DatoCMS.AddMissingSlugs do
 
   defp add_slugs(nil, _item_type), do: nil
   defp add_slugs(items, item_type) do
-    title_field = title_field(item_type)
+    title_field(item_type) |> handle_title_field(items)
+  end
+
+  defp handle_title_field(nil, items), do: items
+  defp handle_title_field(title_field, items) do
     localized = title_field.attributes.localized
     key = AtomKey.to_atom(title_field.attributes.api_key)
     Enum.reduce(items, %{}, fn ({id, item}, slugged_items) ->
