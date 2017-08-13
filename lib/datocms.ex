@@ -54,6 +54,10 @@ defmodule DatoCMS do
         end)
         |> Enum.join("")
       end
+
+      def dato_image_url(image, attributes \\ %{}) do
+        DatoCMS.Image.url_for(image, attributes)
+      end
     end
   end
 
