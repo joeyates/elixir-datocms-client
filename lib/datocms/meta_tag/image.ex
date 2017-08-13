@@ -14,24 +14,24 @@ defmodule DatoCMS.MetaTag.Image do
   defp handle_item_seo_image(nil, nil, fallback_seo_image, _site) do
     {
       :ok, [
-        og_tag("og:image", fallback_seo_image.url),
-        card_tag("twitter:image", fallback_seo_image.url)
+        og_tag("og:image", image_url(fallback_seo_image)),
+        card_tag("twitter:image", image_url(fallback_seo_image))
       ]
     }
   end
   defp handle_item_seo_image(nil, item_image, _fallback_seo_image, _site) do
     {
       :ok, [
-        og_tag("og:image", item_image.url),
-        card_tag("twitter:image", item_image.url)
+        og_tag("og:image", image_url(item_image)),
+        card_tag("twitter:image", image_url(item_image))
       ]
     }
   end
   defp handle_item_seo_image(item_seo_image, _item_image, _fallback_seo_image, _site) do
     {
       :ok, [
-        og_tag("og:image", item_seo_image.url),
-        card_tag("twitter:image", item_seo_image.url)
+        og_tag("og:image", image_url(item_seo_image)),
+        card_tag("twitter:image", image_url(item_seo_image))
       ]
     }
   end
@@ -59,5 +59,9 @@ defmodule DatoCMS.MetaTag.Image do
       field.attributes.field_type == "image"
     end)
     Enum.map(image_fields, fn (field) -> String.to_atom(field.attributes.api_key) end)
+  end
+
+  defp image_url(image) do
+    DatoCMS.Image.url_for(image)
   end
 end
