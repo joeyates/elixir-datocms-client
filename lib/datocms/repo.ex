@@ -73,8 +73,9 @@ defmodule DatoCMS.Repo do
   end
   def handle_call({:localized_items_of_type, type, locale}, _from, state) do
     unlocalized = handle_items_of_type(type, state)
+    item_type = item_type(type, state)
     items = Enum.map(unlocalized, fn ({_id, item}) ->
-      localize(item, locale)
+      localize(item, item_type, locale)
     end)
     {:reply, {:ok, items}, state}
   end
@@ -85,10 +86,7 @@ defmodule DatoCMS.Repo do
     handle_get(specifier, locale, state)
   end
   def handle_call({:item_type, type}, _from, state) do
-    item_types = state[:item_types_by_type]
-    type_name = AtomKey.to_atom(type)
-    item_type = item_types[type_name]
-    handle_item_type(item_type, state)
+    item_type(type, state) |> handle_item_type(state)
   end
 
   def handle_items_of_type(type, state) when is_atom(type) do
@@ -101,23 +99,26 @@ defmodule DatoCMS.Repo do
 
   def handle_get({type, ids}, locale, state) when is_list(ids) do
     items = handle_items_of_type(type, state)
+    item_type = item_type(type, state)
     localized_items = Enum.map(ids, fn (id) ->
       item_key = AtomKey.to_atom(id)
-      localize(items[item_key], locale)
+      localize(items[item_key], item_type, locale)
     end)
     {:reply, {:ok, localized_items}, state}
   end
   def handle_get({type, id}, locale, state) do
     items = handle_items_of_type(type, state)
     item_key = AtomKey.to_atom(id)
-    item = localize(items[item_key], locale)
+    item_type = item_type(type, state)
+    item = localize(items[item_key], item_type, locale)
     {:reply, {:ok, item}, state}
   end
   def handle_get({type}, locale, state) do
     items = handle_items_of_type(type, state)
     first = hd(Map.keys(items))
     item_key = AtomKey.to_atom(first)
-    item = localize(items[item_key], locale)
+    item_type = item_type(type, state)
+    item = localize(items[item_key], item_type, locale)
     {:reply, {:ok, item}, state}
   end
   def handle_get({type, ids}, state) when is_list(ids) do
@@ -148,23 +149,32 @@ defmodule DatoCMS.Repo do
     {:ok, AtomKey.to_atom(first_locale)}
   end
 
-  def localize(item, locale) do
+  def localize(item, item_type, locale) do
+    field_types = Enum.reduce(item_type.fields, %{slug: "string"}, fn (f, acc) ->
+      %{attributes: %{api_key: api_key, field_type: field_type}} = f
+      Map.put(acc, String.to_atom(api_key), field_type)
+    end)
     Enum.reduce(item, %{}, fn ({k, v}, acc) ->
-      value = localize_field(k, v, locale)
+      type = field_types[k]
+      value = if type == "string" || type == "text" do
+        localize_field(k, v, locale)
+      else
+        v
+      end
       Map.put(acc, k, value)
     end)
   end
 
-  defp localize_field(:seo, nil, _locale) do
-    nil
-  end
-  defp localize_field(:seo, v, locale) do
-    localize(v, locale)
-  end
   defp localize_field(_k, %{} = v, locale) do
     v[locale]
   end
   defp localize_field(_k, v, _locale) do
     v
+  end
+
+  defp item_type(type, state) do
+    item_types = state[:item_types_by_type]
+    type_name = AtomKey.to_atom(type)
+    item_types[type_name]
   end
 end
