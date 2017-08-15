@@ -106,6 +106,9 @@ defmodule DatoCMS.Repo do
     end)
     {:reply, {:ok, localized_items}, state}
   end
+  def handle_get({type, nil}, _locale, state) do
+    {:reply, {:ok, nil}, state}
+  end
   def handle_get({type, id}, locale, state) do
     items = handle_items_of_type(type, state)
     item_key = AtomKey.to_atom(id)
