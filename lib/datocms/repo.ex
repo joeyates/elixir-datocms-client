@@ -153,13 +153,13 @@ defmodule DatoCMS.Repo do
   end
 
   def localize(item, item_type, locale) do
-    field_types = Enum.reduce(item_type.fields, %{slug: "string"}, fn (f, acc) ->
-      %{attributes: %{api_key: api_key, field_type: field_type}} = f
-      Map.put(acc, String.to_atom(api_key), field_type)
+    localized_fields = Enum.reduce(item_type.fields, %{slug: "string"}, fn (f, acc) ->
+      %{attributes: %{api_key: api_key, localized: localized}} = f
+      Map.put(acc, String.to_atom(api_key), localized)
     end)
     Enum.reduce(item, %{}, fn ({k, v}, acc) ->
-      type = field_types[k]
-      value = if type == "string" || type == "text" do
+      localized = localized_fields[k]
+      value = if localized do
         localize_field(k, v, locale)
       else
         v
