@@ -8,14 +8,17 @@ defmodule DatoCMS.Image do
   dato_image_url(img, ch: "Width,DPR", width: 200, ...)
   ```
   """
-  def url_for(image, attributes \\ %{}) do
+  def url_for(image, attributes \\ %{}, site \\ nil) do
     all = Map.merge(@extra_attributes, attributes)
-    domain() <> image.path <> "?" <> URI.encode_query(all)
+    domain(site) <> image.path <> "?" <> URI.encode_query(all)
   end
 
-  defp domain() do
-    "https://" <> site().data.attributes.imgix_host
+  defp domain(site) do
+    site = site || repo_site()
+    "https://" <> site.data.attributes.imgix_host
   end
 
-  defp site(), do: DatoCMS.Repo.site!()
+  defp repo_site() do
+    DatoCMS.Repo.site!()
+  end
 end
