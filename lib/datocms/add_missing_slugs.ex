@@ -43,8 +43,7 @@ defmodule DatoCMS.AddMissingSlugs do
 
   defp title_field(%{fields: fields} = _item_type) do
     Enum.find(fields, fn (field) ->
-      field.attributes.appeareance &&
-        field.attributes.appeareance.type == "title"
+      get_in(field, [:attributes, :appeareance, :type]) == "title"
     end)
   end
 end
