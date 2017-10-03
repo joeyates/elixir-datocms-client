@@ -2,11 +2,19 @@ defmodule DatoCMS.AddMissingSlugs do
   def to(items_by_type, item_types_by_type) do
     with_slugs = Enum.reduce(item_types_by_type, items_by_type, fn ({type_name, item_type}, acc) ->
       items = items_by_type[type_name]
-      with_slugs = add_slugs(items, item_type)
+      with_slugs = if has_slugs?(item_type) do
+        items
+      else
+        add_slugs(items, item_type)
+      end
       Map.put(acc, item_type.type_name, with_slugs)
     end)
 
     {:ok, with_slugs}
+  end
+
+  defp has_slugs?(item_type) do
+    Enum.any?(item_type.fields, fn f -> f.attributes.field_type == "slug" end)
   end
 
   defp add_slugs(nil, _item_type), do: nil

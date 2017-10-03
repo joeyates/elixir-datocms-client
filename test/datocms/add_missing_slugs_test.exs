@@ -29,6 +29,15 @@ defmodule DatoCMS.AddMissingSlugs.Test do
     assert(item.slug == %{en: "12345-the-title", it: "12345-il-titolo"})
   end
 
+  describe "if there are already slugs" do
+    test "it does nothing", context do
+      tags = context[:items_by_type].tag
+      tag = tags[:"12347"]
+
+      assert(tag.slug == "a-custom-tag-slug")
+    end
+  end
+
   describe "if there isn't a title field" do
     test "it does nothing", context do
       original = context[:items_by_type].tag[:"XXXXXXXXXXXXXX"]

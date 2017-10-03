@@ -95,7 +95,8 @@
           },
           "name": "A Tag"
         },
-        "name": "A Tag"
+        "name": "A Tag",
+        "slug": "a-custom-tag-slug"
       },
       "relationships": {
         "item_type": {
