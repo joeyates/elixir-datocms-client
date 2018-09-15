@@ -52,6 +52,14 @@ defmodule DatoCMS do
         stringify_tags(tags)
       end
 
+      def dato_file_url(file) do
+        DatoCMS.File.url_for(file)
+      end
+
+      def dato_image_url(image, attributes \\ %{}) do
+        DatoCMS.Image.url_for(image, attributes)
+      end
+
       defp stringify_tags(tags) do
         Enum.map(tags, fn (tag) ->
           attributes = if tag[:attributes] do
@@ -68,10 +76,6 @@ defmodule DatoCMS do
           end
         end)
         |> Enum.join("")
-      end
-
-      def dato_image_url(image, attributes \\ %{}) do
-        DatoCMS.Image.url_for(image, attributes)
       end
     end
   end
