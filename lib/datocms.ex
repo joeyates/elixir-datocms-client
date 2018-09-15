@@ -6,6 +6,9 @@ defmodule DatoCMS do
   @doc false
   defmacro __using__(_opts) do
     quote do
+      def dato_get(specifiers, locale) when is_list(specifiers) do
+        Enum.map(specifiers, &dato_get(&1, locale))
+      end
       def dato_get({_type} = specifier, locale) do
         DatoCMS.Repo.get!(specifier, locale)
       end
