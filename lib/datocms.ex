@@ -38,6 +38,18 @@ defmodule DatoCMS do
 
       def dato_meta_tags(specifier, locale) do
         {:ok, tags} = DatoCMS.MetaTags.for_item(specifier, locale)
+        stringify_tags(tags)
+      end
+
+      def dato_favicon_meta_tags(theme_color \\ nil) do
+        {:ok, tags} = DatoCMS.FaviconMetaTags.meta_tags(
+          DatoCMS.Repo.site!(),
+          theme_color
+        )
+        stringify_tags(tags)
+      end
+
+      defp stringify_tags(tags) do
         Enum.map(tags, fn (tag) ->
           attributes = if tag[:attributes] do
               tag[:attributes]
