@@ -110,7 +110,7 @@ defmodule DatoCMS.Repo do
     end)
     {:reply, {:ok, localized_items}, state}
   end
-  def handle_get({type, nil}, _locale, state) do
+  def handle_get({_type, nil}, _locale, state) do
     {:reply, {:ok, nil}, state}
   end
   def handle_get({type, id}, locale, state) do
