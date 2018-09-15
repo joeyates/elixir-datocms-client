@@ -4,7 +4,7 @@ defmodule DatoCMS.Repo.Test do
 
   setup _context do
     on_exit fn ->
-      DatoCMS.put(nil)
+      DatoCMS.Repo.put(nil)
     end
 
     site = load_fixture("site")
