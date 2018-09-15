@@ -76,12 +76,9 @@ defmodule DatoCMS.Repo do
     {:reply, {:ok, site}, state}
   end
   def handle_call({:localized_items_of_type, type, locale}, _from, state) do
-    unlocalized = handle_items_of_type(type, state)
     item_type = item_type(type, state)
-    items = Enum.map(unlocalized, fn ({_id, item}) ->
-      localize(item, item_type, locale)
-    end)
-    {:reply, {:ok, items}, state}
+    handle_items_of_type(type, state)
+    |> handle_items_of_type_for_localization(state, item_type, locale)
   end
   def handle_call({:get, {specifier}}, _from, state) do
     handle_get(specifier, state)
@@ -143,6 +140,16 @@ defmodule DatoCMS.Repo do
 
   def handle_item_type(item_type, state) do
     {:reply, {:ok, item_type}, state}
+  end
+
+  def handle_items_of_type_for_localization(nil, state, _item_type, _locale) do
+    {:reply, {:error, :not_found}, state}
+  end
+  def handle_items_of_type_for_localization(unlocalized, state, item_type, locale) do
+    items = Enum.map(unlocalized, fn ({_id, item}) ->
+      localize(item, item_type, locale)
+    end)
+    {:reply, {:ok, items}, state}
   end
 
   defp default_locale(state) do
