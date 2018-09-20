@@ -6,7 +6,9 @@ defmodule DatocmsClient.Mixfile do
       app: :datocms_client,
       version: "0.2.1",
       elixir: "~> 1.4",
-      name: "DatoCMS",
+      name: "DatoCMS client",
+      description: "DatoCMS client with helpers for static site generators",
+      package: package(),
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       elixirc_paths: elixirc_paths(Mix.env),
@@ -35,6 +37,16 @@ defmodule DatocmsClient.Mixfile do
       {:httpoison, "~> 0.11.1"},
       {:morphix, "~> 0.0.7"}
     ]
+  end
+
+  defp package do
+    %{
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/joeyates/elixir-datocms-client"
+      },
+      maintainers: ["Joe Yates"]
+    }
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
