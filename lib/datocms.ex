@@ -85,11 +85,19 @@ defmodule DatoCMS do
   end
 
   def load do
-    {:ok, site} = DatoCMS.Site.fetch()
-    {:ok, items} = DatoCMS.Items.fetch()
+    DatoCMS.Site.fetch() |> handle_fetch_site
+  end
+
+  defp handle_fetch_site({:ok, site}) do
+    DatoCMS.Items.fetch() |> handle_fetch_items(site)
+  end
+  defp handle_fetch_site({:error, response}), do: {:error, response}
+
+  defp handle_fetch_items({:ok, items}, site) do
     {:ok, state} = DatoCMS.Transformer.internalize(site, items)
     {:ok} = put(state)
   end
+  defp handle_fetch_items({:error, response}, _site), do: {:error, response}
 
   def put(state) do
     {:ok} = DatoCMS.Repo.put(state)
