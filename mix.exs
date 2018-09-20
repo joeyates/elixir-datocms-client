@@ -4,7 +4,7 @@ defmodule DatocmsClient.Mixfile do
   def project do
     [
       app: :datocms_client,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.4",
       name: "DatoCMS client",
       description: "DatoCMS client with helpers for static site generators",
