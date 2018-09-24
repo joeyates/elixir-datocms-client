@@ -75,7 +75,7 @@ defmodule DatoCMS do
             "<#{tag.tag_name} #{attributes}/>"
           end
         end)
-        |> Enum.join("")
+        |> Enum.join("\n")
       end
     end
   end
