@@ -68,7 +68,9 @@ The generated documentation can be found at
 Provides access to the main data access functionality:
 
 * start/1, start/2 - start the DatoCMS Repo process,
-* load/0 - download all site data, internallize it and store it in the Repo,
+* load/0 - download all site data, internalize it and store it in the Repo,
+* load/1 - as above, but with options to cache the data, and load previously
+  cached data,
 * put/1 - overwrite the data in the Repo with the supplied values,
 * all/0 - retrieve the data in the Repo,
 * cache/0 - copy all Repo data to a file on disk,

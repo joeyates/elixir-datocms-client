@@ -84,7 +84,7 @@ defmodule DatoCMS do
     DatoCMS.Supervisor.start_link()
   end
 
-  def load do
+  def load(_options \\ []) do
     DatoCMS.Site.fetch() |> handle_fetch_site
   end
 
