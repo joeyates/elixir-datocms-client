@@ -180,10 +180,17 @@ defmodule DatoCMS.Repo do
   end
 
   defp localize_field(_k, %{} = v, locale) do
-    v[locale]
+    v[locale] |> handle_localized_value
   end
   defp localize_field(_k, v, _locale) do
-    v
+    v |> handle_localized_value
+  end
+
+  def handle_localized_value(nil), do: nil
+  def handle_localized_value(value) when is_list(value), do: value
+  def handle_localized_value(%{} = value), do: value
+  def handle_localized_value(value) do
+    String.replace(value, "\"", "&quot;")
   end
 
   defp item_type(type, state) do
