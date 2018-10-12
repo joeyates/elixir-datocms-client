@@ -4,11 +4,11 @@ defmodule DatoCMS.MetaTag.Helpers do
   end
 
   def meta_tag(name, content) do
-    tag("meta", %{name: name, content: content})
+    tag("meta", %{name: name, content: Plug.HTML.html_escape(content)})
   end
 
   def og_tag(property, content) do
-    tag("meta", %{property: property, content: content})
+    tag("meta", %{property: property, content: Plug.HTML.html_escape(content)})
   end
 
   def card_tag(name, content) do
