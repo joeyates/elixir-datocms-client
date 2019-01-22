@@ -6,6 +6,11 @@ defmodule DatoCMS do
   @doc false
   defmacro __using__(_opts) do
     quote do
+      # {:type, %{en: [], it: [...]}}
+      def dato_get({type, %{} = locale_ids}, locale) do
+        ids = locale_ids[locale]
+        Enum.map(ids, &dato_get({type, &1}, locale))
+      end
       def dato_get(specifiers, locale) when is_list(specifiers) do
         Enum.map(specifiers, &dato_get(&1, locale))
       end
