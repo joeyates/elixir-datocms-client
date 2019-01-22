@@ -4,7 +4,7 @@ defmodule DatocmsClient.Mixfile do
   def project do
     [
       app: :datocms_client,
-      version: "0.2.3",
+      version: "0.2.4",
       elixir: "~> 1.4",
       name: "DatoCMS client",
       description: "DatoCMS client with helpers for static site generators",
@@ -31,7 +31,7 @@ defmodule DatocmsClient.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:exjsx, "~> 3.2"},
       {:json_hyperschema_client_builder, "~> 0.9.1"},
       {:httpoison, "~> 0.11.1"},
