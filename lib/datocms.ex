@@ -6,40 +6,85 @@ defmodule DatoCMS do
   @doc false
   defmacro __using__(_opts) do
     quote do
+      def dato_item({type, _id} = specifier, locale) when is_atom(type) do
+        DatoCMS.Repo.get!(specifier, locale)
+      end
+      def dato_item({type, _id} = specifier) when is_atom(type) do
+        DatoCMS.Repo.get!(specifier)
+      end
+      def dato_item({type} = specifier, locale) when is_atom(type) do
+        DatoCMS.Repo.get!(specifier, locale)
+      end
+      def dato_item(type, locale) when is_atom(type) do
+        DatoCMS.Repo.get!({type}, locale)
+      end
+      def dato_item({type} = specifier) when is_atom(type) do
+        DatoCMS.Repo.get!(specifier)
+      end
+      def dato_item(type) when is_atom(type) do
+        DatoCMS.Repo.get!({type})
+      end
+
       # {:type, %{en: [], it: [...]}}
+      def dato_items({type, %{} = locale_ids}, locale) when is_atom(type) do
+        ids = locale_ids[locale]
+        Enum.map(ids, &dato_item({type, &1}, locale))
+      end
+      def dato_items(specifiers, locale) when is_list(specifiers) do
+        Enum.map(specifiers, &dato_item(&1, locale))
+      end
+      def dato_items({type}, locale) when is_atom(type) do
+        DatoCMS.Repo.localized_items_of_type!(type, locale)
+      end
+      def dato_items(type, locale) when is_atom(type) do
+        DatoCMS.Repo.localized_items_of_type!(type, locale)
+      end
+
+      # {:type, %{en: [], it: [...]}}
+      @deprecated "Use dato_items"
       def dato_get({type, %{} = locale_ids}, locale) do
         ids = locale_ids[locale]
         Enum.map(ids, &dato_get({type, &1}, locale))
       end
+      @deprecated "Use dato_items"
       def dato_get(specifiers, locale) when is_list(specifiers) do
         Enum.map(specifiers, &dato_get(&1, locale))
       end
+      @deprecated "Use dato_item"
       def dato_get({_type} = specifier, locale) do
         DatoCMS.Repo.get!(specifier, locale)
       end
+      @deprecated "Use dato_item"
       def dato_get({_type, _id} = specifier, locale) do
         DatoCMS.Repo.get!(specifier, locale)
       end
+      @deprecated "Use dato_item"
       def dato_get({_type} = specifier) do
         DatoCMS.Repo.get!(specifier)
       end
+      @deprecated "Use dato_item"
       def dato_get({_type, _id} = specifier) do
         DatoCMS.Repo.get!(specifier)
       end
+      @deprecated "Use dato_item"
       def dato_get(type, locale) do
         DatoCMS.Repo.get!({type}, locale)
       end
+      @deprecated "Use dato_item"
       def dato_get(type) do
         DatoCMS.Repo.get!({type})
       end
 
+      @deprecated "Use dato_item"
       def dato_page(name) do
         DatoCMS.Repo.get!({name})
       end
+      @deprecated "Use dato_item"
       def dato_page(name, locale) do
         DatoCMS.Repo.get!({name}, locale)
       end
 
+      @deprecated "Use dato_items"
       def dato_by_type(type, locale) do
         DatoCMS.Repo.localized_items_of_type!(type, locale)
       end
