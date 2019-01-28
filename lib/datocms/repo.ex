@@ -1,5 +1,6 @@
 defmodule DatoCMS.Repo do
   use GenServer
+  use Memoize
 
   def init(args) do
     {:ok, args}
@@ -31,19 +32,19 @@ defmodule DatoCMS.Repo do
     site
   end
 
-  def localized_items_of_type(type, locale) do
+  defmemo localized_items_of_type(type, locale) do
     GenServer.call(:repo, {:localized_items_of_type, type, locale})
   end
 
-  def localized_items_of_type!(type, locale) do
+  defmemo localized_items_of_type!(type, locale) do
     {:ok, localized_items_of_type} = localized_items_of_type(type, locale)
     localized_items_of_type
   end
 
-  def get(specifier) do
+  defmemo get(specifier) do
     GenServer.call(:repo, {:get, {specifier}})
   end
-  def get(specifier, locale) do
+  defmemo get(specifier, locale) do
     GenServer.call(:repo, {:get, {specifier, locale}})
   end
 
