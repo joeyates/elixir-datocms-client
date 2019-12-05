@@ -55,7 +55,8 @@ defmodule DatoCMS.MetaTag.Title do
 
   defp title_field(item_type) do
     Enum.find(item_type.fields, fn (%{attributes: attributes}) ->
-      attributes.field_type == "string" && attributes.appeareance.type == "title"
+      type = Map.get(attributes.appeareance, :type)
+      attributes.field_type == "string" && type == "title"
     end) |> name_from_field
   end
 
