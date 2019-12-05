@@ -144,7 +144,7 @@ defmodule DatoCMS.Repo do
   end
 
   def handle_items_of_type_for_localization(nil, state, _item_type, _locale) do
-    {:reply, {:error, :not_found}, state}
+    {:reply, {:ok, []}, state}
   end
   def handle_items_of_type_for_localization(unlocalized, state, item_type, locale) do
     items = Enum.map(unlocalized, fn ({_id, item}) ->
