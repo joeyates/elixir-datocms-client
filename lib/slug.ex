@@ -9,6 +9,11 @@ defmodule Slug do
 
   ## Normalization
 
+  Punctuation is replaced by '-':
+
+      iex> Slug.for(123, "S&P")
+      "123-s-p"
+
   The title is downcased:
 
       iex> Slug.for(123, "AAAAA")
@@ -41,24 +46,12 @@ defmodule Slug do
   """
 
   @max_text 51
+  @transform_to_hyphen ~r([‐ ’,&+.#/@!:°])u
 
   def for(id, title) do
     clean =
       String.normalize(title, :nfd)
-      |> String.replace("‐", "-")
-      |> String.replace(" ", "-")
-      |> String.replace("'", "-")
-      |> String.replace("’", "-")
-      |> String.replace(",", "-")
-      |> String.replace("&", "-")
-      |> String.replace("+", "-")
-      |> String.replace(".", "-")
-      |> String.replace("#", "-")
-      |> String.replace("/", "-")
-      |> String.replace("@", "-")
-      |> String.replace("!", "-")
-      |> String.replace(":", "-")
-      |> String.replace("°", "-")
+      |> String.replace(@transform_to_hyphen, "-")
       |> String.replace("ø", "o")
       |> String.replace(~r/[^0-9\-A-z]/u, "")
       |> String.downcase
