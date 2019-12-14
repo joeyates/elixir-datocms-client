@@ -45,6 +45,7 @@ defmodule Slug do
   def for(id, title) do
     clean =
       String.normalize(title, :nfd)
+      |> String.replace("‐", "-")
       |> String.replace(" ", "-")
       |> String.replace("'", "-")
       |> String.replace("’", "-")
@@ -55,6 +56,10 @@ defmodule Slug do
       |> String.replace("#", "-")
       |> String.replace("/", "-")
       |> String.replace("@", "-")
+      |> String.replace("!", "-")
+      |> String.replace(":", "-")
+      |> String.replace("°", "-")
+      |> String.replace("ø", "o")
       |> String.replace(~r/[^0-9\-A-z]/u, "")
       |> String.downcase
     stripped =
