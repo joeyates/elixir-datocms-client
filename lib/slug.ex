@@ -33,7 +33,15 @@ defmodule Slug do
 
       iex> Slug.for(123, "1-")
       "123-1"
+
+  The text part is capped at 51 characters:
+
+      iex> Slug.for(123, String.duplicate("a", 100))
+      "123-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   """
+
+  @max_text 51
+
   def for(id, title) do
     clean =
       String.normalize(title, :nfd)
@@ -53,7 +61,7 @@ defmodule Slug do
       String.replace_leading(clean, "-", "")
       |> String.replace_trailing("-", "")
     deduped = String.replace(stripped, ~r/\-\-+/u, "-")
-    sliced = String.slice(deduped, 0, 51)
+    sliced = String.slice(deduped, 0, @max_text)
     "#{id}-#{sliced}"
   end
 end
