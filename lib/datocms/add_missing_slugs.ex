@@ -2,7 +2,8 @@ defmodule DatoCMS.AddMissingSlugs do
   def to(items_by_type, item_types_by_type) do
     with_slugs = Enum.reduce(item_types_by_type, items_by_type, fn ({type_name, item_type}, acc) ->
       items = items_by_type[type_name]
-      with_slugs = if has_slugs?(item_type) do
+      has_slugs = has_slugs?(item_type)
+      with_slugs = if has_slugs do
         items
       else
         add_slugs(items, item_type)
