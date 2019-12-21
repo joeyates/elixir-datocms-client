@@ -33,6 +33,7 @@ defmodule DatocmsClient.Mixfile do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:exjsx, "~> 3.2"},
+      {:fermo_helpers, "~> 0.1.0", git: "https://github.com/leanpanda-com/fermo_helpers.git"},
       {:json_hyperschema_client_builder, "~> 0.9.1"},
       {:httpoison, "~> 0.11.1"},
       {:memoize, "~> 1.3"},
