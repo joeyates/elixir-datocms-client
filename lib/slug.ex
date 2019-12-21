@@ -46,7 +46,7 @@ defmodule Slug do
   """
 
   @max_text 51
-  @transform_to_hyphen ~r([‐ ’,&+.#/@!:°])u
+  @transform_to_hyphen ~r([‐' ’,&+.#/@!:°])u
 
   def for(id, title) do
     clean =
