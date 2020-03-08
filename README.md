@@ -1,6 +1,6 @@
 # DatoCMS Client
 
-Provices access to data in a DatoCMS site.
+Provides access to data in a DatoCMS site.
 
 ## Installation
 
